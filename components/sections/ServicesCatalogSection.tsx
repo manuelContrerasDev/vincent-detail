@@ -22,7 +22,7 @@ export function ServicesCatalogSection() {
           <div>
             <SectionHeading
               eyebrow="Servicios"
-              title="Servicios a medida"
+              title="Servicios Personalizados"
               description="Opciones puntuales con referencia inicial según nivel de trabajo y tipo de vehículo."
             />
           </div>

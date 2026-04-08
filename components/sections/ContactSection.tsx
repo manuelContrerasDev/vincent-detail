@@ -47,7 +47,7 @@ export function ContactSection() {
             </p>
 
             <h2 className="font-[family:var(--font-heading)] mt-3 text-3xl font-semibold leading-[1.02] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
-              Cotiza y coordina tu servicio
+              Cotiza con Nosotros
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-white/72 md:text-base">

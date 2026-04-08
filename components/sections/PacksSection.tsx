@@ -16,12 +16,14 @@ export function PacksSection() {
         <div className="max-w-3xl">
           <SectionHeading
             eyebrow="Packs"
-            title="Elige el nivel de tu servicio"
+            title="Niveles de Packs"
             description="Cuatro propuestas de detailing para distintos niveles de cuidado, terminación y protección."
           />
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:gap-8">
+        <div className="mt-8 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),rgba(214,178,94,0.18),rgba(255,255,255,0.12),transparent)]" />
+
+        <div className="mt-8 grid gap-5 sm:gap-6 md:grid-cols-2 xl:gap-8">
           {packs.map((pack, index) => (
             <motion.div
               key={pack.slug}

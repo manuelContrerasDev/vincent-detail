@@ -197,8 +197,11 @@ export function ResultsSection() {
               <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
                 Pulido
               </span>
-              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-[#F2D58A]/20 bg-[#F2D58A]/8 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
                 Encerado
+              </span>
+              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                Cerámico
               </span>
             </div>
 

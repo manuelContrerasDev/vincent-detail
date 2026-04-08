@@ -78,80 +78,85 @@ export function PackVisualCard({
   return (
     <article
       className={cn(
-        "group relative overflow-hidden rounded-[1.65rem] border bg-black transition duration-300 shadow-[0_14px_36px_rgba(0,0,0,0.20)]",
+        "group relative overflow-hidden rounded-[1.45rem] border bg-black transition duration-300 shadow-[0_14px_36px_rgba(0,0,0,0.20)] md:rounded-[1.65rem]",
         styles.border
       )}
     >
-      <div className="absolute inset-0 rounded-[1.65rem] ring-1 ring-inset ring-white/6 transition duration-300" />
+      <div className="absolute inset-0 rounded-[1.45rem] ring-1 ring-inset ring-white/6 transition duration-300 md:rounded-[1.65rem]" />
       <div
         className={cn(
-          "absolute inset-0 rounded-[1.65rem] ring-1 ring-inset ring-transparent transition duration-300",
+          "absolute inset-0 rounded-[1.45rem] ring-1 ring-inset ring-transparent transition duration-300 md:rounded-[1.65rem]",
           styles.ring
         )}
       />
 
-      <div className="relative aspect-[5/6] min-h-[520px] overflow-hidden md:min-h-[560px] xl:min-h-[620px]">
+      <div className="relative aspect-[5/6] min-h-[400px] overflow-hidden sm:min-h-[460px] md:min-h-[520px] xl:min-h-[620px]">
         <Image
           src={image}
           alt={name}
           fill
+          priority={name === "Pack Bronce"}
           sizes="(max-width: 767px) 100vw, (max-width: 1535px) 50vw, 50vw"
           className="object-cover transition duration-700 group-hover:scale-[1.03]"
         />
 
         <div className={cn("absolute inset-0", styles.glow)} />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.16),rgba(0,0,0,0.62))]" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0))]" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0))] md:h-28" />
 
-        <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 lg:p-6">
-          <div className="rounded-[1.25rem] border border-white/14 bg-black/70 p-4 md:p-5 lg:p-6 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.20)]">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <h3 className="font-[family:var(--font-rajdhani)] text-[1.3rem] font-bold uppercase tracking-[0.05em] text-[#f7f3eb] md:text-[1.5rem] xl:text-[1.7rem]">
-                  {name}
-                </h3>
-                <p className="mt-2 text-[14px] leading-6 text-white/80 md:text-[15px] xl:text-[16px]">
-                  {summary}
-                </p>
+        <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5 lg:p-6">
+          <div className="rounded-[1.1rem] border border-white/14 bg-black/70 p-3.5 sm:p-4 md:p-5 lg:p-6 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.20)]">
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex flex-col items-start gap-2 sm:gap-3">
+                <span
+                  className={cn(
+                    "font-[family:var(--font-rajdhani)] inline-flex shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] sm:px-3 sm:py-1.5 sm:text-[10px]",
+                    styles.badge
+                  )}
+                >
+                  {accent}
+                </span>
+
+                <div className="min-w-0">
+                  <h3 className="font-[family:var(--font-rajdhani)] text-[1.08rem] font-bold uppercase tracking-[0.05em] text-[#f7f3eb] sm:text-[1.2rem] md:text-[1.4rem] xl:text-[1.7rem]">
+                    {name}
+                  </h3>
+                  <p className="mt-1.5 text-[12px] leading-5 text-white/80 sm:text-[13px] sm:leading-6 md:text-[14px] xl:text-[16px]">
+                    {summary}
+                  </p>
+                </div>
               </div>
 
-              <span
-                className={cn(
-                  "font-[family:var(--font-rajdhani)] shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em]",
-                  styles.badge
-                )}
-              >
-                {accent}
-              </span>
-            </div>
+              <div className="h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.16),rgba(255,255,255,0.10),transparent)]" />
 
-            <ul className="mt-5 space-y-3">
-              {highlights.map((item) => (
-                <li key={item} className="flex items-center gap-3">
-                  <span
-                    className={cn(
-                      "flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
-                      styles.checkBg
-                    )}
-                  >
-                    <Check className={cn("h-3.5 w-3.5", styles.check)} />
-                  </span>
-                  <span className="text-[13px] leading-6 text-white/84 md:text-[14px] xl:text-[15px]">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
+              <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
+                {highlights.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 sm:gap-3">
+                    <span
+                      className={cn(
+                        "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full sm:h-5 sm:w-5",
+                        styles.checkBg
+                      )}
+                    >
+                      <Check className={cn("h-3 w-3 sm:h-3.5 sm:w-3.5", styles.check)} />
+                    </span>
+                    <span className="text-[12px] leading-5 text-white/84 sm:text-[13px] sm:leading-6 md:text-[14px] xl:text-[15px]">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            <div className="mt-6">
-              <CTAButton
-                href={getWhatsAppUrl(`Hola, quiero cotizar el ${name} de Vincent.Detail.`)}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full px-4 py-3.5 text-[12px] md:text-[13px]"
-              >
-                Cotizar
-              </CTAButton>
+              <div className="pt-1 sm:pt-2">
+                <CTAButton
+                  href={getWhatsAppUrl(`Hola, quiero cotizar el ${name} de Vincent.Detail.`)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full px-4 py-3 text-[11px] sm:text-[12px] md:py-3.5 md:text-[13px]"
+                >
+                  Cotizar
+                </CTAButton>
+              </div>
             </div>
           </div>
         </div>

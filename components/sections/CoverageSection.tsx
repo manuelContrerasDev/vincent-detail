@@ -42,7 +42,7 @@ export function CoverageSection() {
           <div>
             <SectionHeading
               eyebrow="Cobertura"
-              title="Zonas de atención"
+              title="Localidades"
               description="Cobertura activa con coordinación previa."
             />
           </div>
@@ -158,7 +158,7 @@ export function CoverageSection() {
           >
             <div className="absolute inset-0">
               <Image
-                src="/gallery/resultado-marca.png"
+                src="/gallery/coverage-bg.png"
                 alt="Vincent Detail Tundra mobile detail"
                 fill
                 sizes="(max-width: 1023px) 100vw, 50vw"
@@ -181,7 +181,7 @@ export function CoverageSection() {
                       Cobertura flexible
                     </p>
                     <h3 className="font-[family:var(--font-rajdhani)] mt-1 text-[1.2rem] font-semibold uppercase tracking-[0.04em] text-[#f7f3eb] md:text-[1.35rem]">
-                      Atención coordinada
+                      Servicio a domicilio
                     </h3>
                   </div>
                 </div>
