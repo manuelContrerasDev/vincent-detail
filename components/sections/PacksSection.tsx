@@ -16,7 +16,7 @@ export function PacksSection() {
         <div className="max-w-3xl">
           <SectionHeading
             eyebrow="Packs"
-            title="Niveles de Packs"
+            title="Detailing Packs"
             description="Cuatro propuestas de detailing para distintos niveles de cuidado, terminación y protección."
           />
         </div>
