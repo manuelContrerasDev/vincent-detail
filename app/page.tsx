@@ -8,13 +8,13 @@ import { ResultsSection } from "@/components/sections/ResultsSection";
 import { CoverageSection } from "@/components/sections/CoverageSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
+import { FirstFoldSection } from "@/components/sections/FirstFoldSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#07111f] text-[#f6f2ea]">
       <Header />
-      <HeroSection />
-      <BenefitsSection />
+      <FirstFoldSection />
       <PacksSection />
       <ServicesCatalogSection />
       <ResultsSection />

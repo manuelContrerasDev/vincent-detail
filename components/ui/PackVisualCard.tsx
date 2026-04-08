@@ -21,43 +21,48 @@ const ACCENT_STYLES: Record<
     glow: string;
     check: string;
     checkBg: string;
+    ring: string;
   }
 > = {
   bronce: {
-    border: "border-[#9A6A3A]/45 hover:border-[#C18B58]/60",
+    border: "border-[#9A6A3A]/55 hover:border-[#C18B58]/72",
     badge:
-      "border-[#C18B58]/20 bg-[linear-gradient(135deg,rgba(193,139,88,0.14),rgba(154,106,58,0.12))] text-[#C18B58]",
-    glow: "bg-[radial-gradient(circle_at_top_right,rgba(193,139,88,0.16),transparent_24%)]",
+      "border-[#C18B58]/24 bg-[linear-gradient(135deg,rgba(193,139,88,0.18),rgba(154,106,58,0.14))] text-[#C18B58]",
+    glow: "bg-[radial-gradient(circle_at_top_right,rgba(193,139,88,0.20),transparent_26%)]",
     check: "text-[#C18B58]",
     checkBg:
-      "bg-[linear-gradient(135deg,rgba(193,139,88,0.18),rgba(154,106,58,0.14))]",
+      "bg-[linear-gradient(135deg,rgba(193,139,88,0.20),rgba(154,106,58,0.16))]",
+    ring: "group-hover:ring-[#C18B58]/18",
   },
   plata: {
-    border: "border-[#AEB6C2]/40 hover:border-[#D9E0EA]/60",
+    border: "border-[#AEB6C2]/52 hover:border-[#D9E0EA]/70",
     badge:
-      "border-[#D9E0EA]/18 bg-[linear-gradient(135deg,rgba(217,224,234,0.14),rgba(174,182,194,0.12))] text-[#E4EAF2]",
-    glow: "bg-[radial-gradient(circle_at_top_right,rgba(217,224,234,0.16),transparent_24%)]",
+      "border-[#D9E0EA]/22 bg-[linear-gradient(135deg,rgba(217,224,234,0.18),rgba(174,182,194,0.14))] text-[#E4EAF2]",
+    glow: "bg-[radial-gradient(circle_at_top_right,rgba(217,224,234,0.20),transparent_26%)]",
     check: "text-[#E4EAF2]",
     checkBg:
-      "bg-[linear-gradient(135deg,rgba(217,224,234,0.18),rgba(174,182,194,0.14))]",
+      "bg-[linear-gradient(135deg,rgba(217,224,234,0.20),rgba(174,182,194,0.16))]",
+    ring: "group-hover:ring-[#D9E0EA]/18",
   },
   oro: {
-    border: "border-[#D6B25E]/50 hover:border-[#F2D58A]/65",
+    border: "border-[#D6B25E]/62 hover:border-[#F2D58A]/80",
     badge:
-      "border-[#F2D58A]/20 bg-[linear-gradient(135deg,rgba(242,213,138,0.14),rgba(169,123,30,0.12))] text-[#F2D58A]",
-    glow: "bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.18),transparent_24%)]",
+      "border-[#F2D58A]/24 bg-[linear-gradient(135deg,rgba(242,213,138,0.18),rgba(169,123,30,0.14))] text-[#F2D58A]",
+    glow: "bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.24),transparent_26%)]",
     check: "text-[#F2D58A]",
     checkBg:
-      "bg-[linear-gradient(135deg,rgba(242,213,138,0.18),rgba(169,123,30,0.14))]",
+      "bg-[linear-gradient(135deg,rgba(242,213,138,0.20),rgba(169,123,30,0.16))]",
+    ring: "group-hover:ring-[#F2D58A]/20",
   },
   diamante: {
-    border: "border-[#7FD6E6]/40 hover:border-[#A9EEFF]/60",
+    border: "border-[#7FD6E6]/54 hover:border-[#A9EEFF]/72",
     badge:
-      "border-[#A9EEFF]/18 bg-[linear-gradient(135deg,rgba(169,238,255,0.14),rgba(127,214,230,0.12))] text-[#C7F6FF]",
-    glow: "bg-[radial-gradient(circle_at_top_right,rgba(169,238,255,0.16),transparent_24%)]",
+      "border-[#A9EEFF]/22 bg-[linear-gradient(135deg,rgba(169,238,255,0.18),rgba(127,214,230,0.14))] text-[#C7F6FF]",
+    glow: "bg-[radial-gradient(circle_at_top_right,rgba(169,238,255,0.20),transparent_26%)]",
     check: "text-[#C7F6FF]",
     checkBg:
-      "bg-[linear-gradient(135deg,rgba(169,238,255,0.18),rgba(127,214,230,0.14))]",
+      "bg-[linear-gradient(135deg,rgba(169,238,255,0.20),rgba(127,214,230,0.16))]",
+    ring: "group-hover:ring-[#A9EEFF]/18",
   },
 };
 
@@ -73,36 +78,46 @@ export function PackVisualCard({
   return (
     <article
       className={cn(
-        "group overflow-hidden rounded-[1.35rem] border bg-black transition duration-300 md:rounded-[1.45rem]",
+        "group relative overflow-hidden rounded-[1.65rem] border bg-black transition duration-300 shadow-[0_14px_36px_rgba(0,0,0,0.20)]",
         styles.border
       )}
     >
-      <div className="relative aspect-[4/5] overflow-hidden">
+      <div className="absolute inset-0 rounded-[1.65rem] ring-1 ring-inset ring-white/6 transition duration-300" />
+      <div
+        className={cn(
+          "absolute inset-0 rounded-[1.65rem] ring-1 ring-inset ring-transparent transition duration-300",
+          styles.ring
+        )}
+      />
+
+      <div className="relative aspect-[5/6] min-h-[520px] overflow-hidden md:min-h-[560px] xl:min-h-[620px]">
         <Image
           src={image}
           alt={name}
           fill
-          className="object-cover transition duration-700 group-hover:scale-[1.02]"
+          sizes="(max-width: 767px) 100vw, (max-width: 1535px) 50vw, 50vw"
+          className="object-cover transition duration-700 group-hover:scale-[1.03]"
         />
 
         <div className={cn("absolute inset-0", styles.glow)} />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.06),rgba(0,0,0,0.34))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.16),rgba(0,0,0,0.62))]" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0))]" />
 
-        <div className="absolute inset-x-0 bottom-0 p-2.5 md:p-3">
-          <div className="rounded-[1rem] border border-white/10 bg-black/60 p-3 backdrop-blur-md md:rounded-[1.1rem]">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <h3 className="text-lg font-semibold tracking-tight text-[#f7f3eb] md:text-[1.3rem]">
+        <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 lg:p-6">
+          <div className="rounded-[1.25rem] border border-white/14 bg-black/70 p-4 md:p-5 lg:p-6 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.20)]">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h3 className="font-[family:var(--font-rajdhani)] text-[1.3rem] font-bold uppercase tracking-[0.05em] text-[#f7f3eb] md:text-[1.5rem] xl:text-[1.7rem]">
                   {name}
                 </h3>
-                <p className="mt-1 text-xs leading-5 text-white/70 md:text-sm md:leading-6">
+                <p className="mt-2 text-[14px] leading-6 text-white/80 md:text-[15px] xl:text-[16px]">
                   {summary}
                 </p>
               </div>
 
               <span
                 className={cn(
-                  "shrink-0 rounded-full border px-2 py-1 text-[9px] font-medium uppercase tracking-[0.12em] md:px-2.5 md:text-[10px]",
+                  "font-[family:var(--font-rajdhani)] shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em]",
                   styles.badge
                 )}
               >
@@ -110,30 +125,30 @@ export function PackVisualCard({
               </span>
             </div>
 
-            <ul className="mt-3 space-y-1.5">
+            <ul className="mt-5 space-y-3">
               {highlights.map((item) => (
-                <li key={item} className="flex items-center gap-2">
+                <li key={item} className="flex items-center gap-3">
                   <span
                     className={cn(
-                      "flex h-4 w-4 items-center justify-center rounded-full",
+                      "flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
                       styles.checkBg
                     )}
                   >
-                    <Check className={cn("h-2.5 w-2.5", styles.check)} />
+                    <Check className={cn("h-3.5 w-3.5", styles.check)} />
                   </span>
-                  <span className="text-[11px] leading-5 text-white/75 md:text-xs">
+                  <span className="text-[13px] leading-6 text-white/84 md:text-[14px] xl:text-[15px]">
                     {item}
                   </span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-3">
+            <div className="mt-6">
               <CTAButton
                 href={getWhatsAppUrl(`Hola, quiero cotizar el ${name} de Vincent.Detail.`)}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full px-4 py-2.5 text-xs md:text-sm"
+                className="w-full px-4 py-3.5 text-[12px] md:text-[13px]"
               >
                 Cotizar
               </CTAButton>

@@ -16,7 +16,7 @@ export function SectionShell({
   containerClassName,
 }: SectionShellProps) {
   return (
-    <section id={id} className={cn("py-20 lg:py-28", className)}>
+    <section id={id} className={cn("py-16 md:py-20 lg:py-24", className)}>
       <SectionContainer className={containerClassName}>
         {children}
       </SectionContainer>

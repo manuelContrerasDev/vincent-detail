@@ -10,7 +10,7 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noreferrer"
       aria-label="Escribir por WhatsApp"
-      className="fixed bottom-5 right-5 z-60 inline-flex items-center gap-3 rounded-full border border-[#E5C96B]/25 bg-[linear-gradient(135deg,#E5C96B_0%,#C9A227_45%,#8A6A12_100%)] px-5 py-3 text-sm font-medium text-black shadow-2xl shadow-black/30 transition duration-300 hover:scale-[1.02]"
+      className="fixed bottom-5 right-5 z-60 inline-flex items-center gap-3 rounded-full border border-[#25D366]/30 bg-[linear-gradient(135deg,#25D366_0%,#20BD5A_45%,#128C7E_100%)] px-5 py-3 text-sm font-semibold text-black shadow-[0_14px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:scale-[1.02] hover:brightness-105"
     >
       <MessageCircle className="h-5 w-5" />
       <span className="hidden sm:inline">WhatsApp</span>

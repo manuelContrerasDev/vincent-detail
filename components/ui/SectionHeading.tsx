@@ -11,22 +11,23 @@ export function SectionHeading({
   description,
   align = "left",
 }: SectionHeadingProps) {
-  const alignment = align === "center" ? "text-center mx-auto" : "text-left";
+  const alignment =
+    align === "center" ? "mx-auto text-center items-center" : "text-left items-start";
 
   return (
-    <div className={`max-w-3xl ${alignment}`}>
+    <div className={`flex max-w-3xl flex-col ${alignment}`}>
       {eyebrow ? (
-        <p className="text-xs uppercase tracking-[0.30em] text-[#D6B25E] md:text-sm md:tracking-[0.32em]">
+        <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.28em] text-[#D6B25E] md:text-[12px] md:tracking-[0.32em]">
           {eyebrow}
         </p>
       ) : null}
 
-      <h2 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight text-[#f7f3eb] md:text-5xl lg:text-[3.25rem]">
+      <h2 className="font-[family:var(--font-heading)] mt-3 text-3xl font-semibold leading-[1.02] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
         {title}
       </h2>
 
       {description ? (
-        <p className="mt-5 max-w-2xl text-base leading-8 text-white/70 md:text-lg">
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 md:text-base md:leading-8">
           {description}
         </p>
       ) : null}

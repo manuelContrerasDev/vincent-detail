@@ -1,76 +1,116 @@
 import Image from "next/image";
+import { MapPin, MessageCircle, Mail, ChevronRight } from "lucide-react";
 import { siteConfig } from "@/content/site";
 import { SectionContainer } from "@/components/layout/SectionContainer";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
+
+const navItems = [
+  { label: "Inicio", href: "#inicio" },
+  { label: "Packs", href: "#packs" },
+  { label: "Servicios", href: "#servicios" },
+  { label: "Galería", href: "#resultados" },
+  { label: "Localidad", href: "#cobertura" },
+  { label: "Contacto", href: "#contacto" },
+];
 
 export function Footer() {
   return (
     <footer className="relative border-t border-white/10 bg-black">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.06),transparent_20%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.05),transparent_20%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(242,213,138,0.24),transparent)]" />
 
-      <SectionContainer className="relative py-12 md:py-14">
-        <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-start">
-          <div>
+      <SectionContainer className="relative py-12 md:py-14 lg:py-16">
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="lg:pr-6">
             <div className="flex items-center gap-4">
-              <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.03]">
+              <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.03]">
                 <Image
-                  src="/logo/logo-vincent-detail-negro.png"
+                  src="/images/logo/logo-vincent-detail-negro.png"
                   alt={siteConfig.name}
-                  width={56}
-                  height={56}
-                  className="h-12 w-12 object-cover"
+                  width={48}
+                  height={48}
+                  className="h-10 w-10 object-cover"
                 />
               </div>
 
               <div>
-                <p className="text-[1.1rem] font-semibold leading-none text-[#f7f3eb]">
+                <p className="font-[family:var(--font-orbitron)] text-[0.95rem] font-semibold uppercase tracking-[0.10em] text-[#f7f3eb]">
                   {siteConfig.name}
                 </p>
-                <p className="mt-1 bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_42%,#A97B1E_100%)] bg-clip-text text-[11px] uppercase tracking-[0.28em] text-transparent">
+                <p className="font-[family:var(--font-rajdhani)] mt-1 text-[10px] uppercase tracking-[0.24em] text-[#D6B25E]">
                   {siteConfig.tagline}
                 </p>
               </div>
             </div>
 
-            <p className="mt-6 max-w-xl text-sm leading-7 text-white/70">
-              Servicios de detailing automotriz enfocados en limpieza,
-              corrección, protección y presentación visual del vehículo.
+            <p className="mt-5 max-w-sm text-sm leading-7 text-white/68">
+              Nos preocupamos por ofrecer un servicio profesional de calidad.
             </p>
           </div>
 
-          <div className="relative md:pl-8">
-            <div className="absolute left-0 top-0 hidden h-full w-px bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.10),transparent)] md:block" />
+          <div className="relative lg:px-8">
+            <div className="absolute left-0 top-0 hidden h-full w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.18),transparent)] lg:block" />
 
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#D6B25E]">
+            <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E]">
+              Navegación
+            </p>
+
+            <nav className="mt-4 grid gap-3">
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="group inline-flex items-center gap-2 font-[family:var(--font-rajdhani)] text-sm uppercase tracking-[0.12em] text-white/68 transition hover:text-white"
+                >
+                  <ChevronRight className="h-4 w-4 text-[#F2D58A]/80 transition group-hover:translate-x-0.5" />
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="relative lg:pl-8">
+            <div className="absolute left-0 top-0 hidden h-full w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.18),transparent)] lg:block" />
+
+            <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E]">
               Contacto
             </p>
 
-            <div className="mt-4 space-y-2 text-sm text-white/70">
-              <p>{siteConfig.whatsappDisplay}</p>
+            <div className="mt-4 space-y-4">
+              <div className="flex items-start gap-3 text-white/72">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#F2D58A]" />
+                <p className="text-sm leading-6">
+                  11 de Octubre 248, El Monte / a domicilio
+                </p>
+              </div>
+
               <a
-                href={siteConfig.instagramUrl}
+                href={getWhatsAppUrl("Hola, quiero más información sobre los servicios de Vincent.Detail.")}
                 target="_blank"
                 rel="noreferrer"
-                className="block transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D58A] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="flex items-start gap-3 text-white/72 transition hover:text-white"
               >
-                {siteConfig.instagram}
+                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#F2D58A]" />
+                <p className="text-sm leading-6">{siteConfig.whatsappDisplay}</p>
+              </a>
+
+              <a
+                href="mailto:vicenelopez5@gmail.com"
+                className="flex items-start gap-3 text-white/72 transition hover:text-white"
+              >
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#F2D58A]" />
+                <p className="select-all text-sm leading-6">
+                  vicenelopez5@gmail.com
+                </p>
               </a>
             </div>
-
-            <p className="mt-6 text-sm leading-7 text-white/60">
-              Para cotizaciones y disponibilidad, se recomienda escribir directamente por WhatsApp.
-            </p>
           </div>
         </div>
 
         <div className="mt-10 border-t border-white/10 pt-5">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <p className="text-xs tracking-[0.08em] text-white/45">
-              © {new Date().getFullYear()} {siteConfig.name}. Todos los derechos reservados.
-            </p>
-
-            <div className="h-px w-full max-w-[180px] bg-[linear-gradient(90deg,transparent,rgba(242,213,138,0.24),transparent)] md:w-[180px]" />
-          </div>
+          <p className="text-xs tracking-[0.08em] text-white/45">
+            © {new Date().getFullYear()} Vincent.Detail. Todos los derechos reservados.
+          </p>
         </div>
       </SectionContainer>
     </footer>

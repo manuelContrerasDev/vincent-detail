@@ -1,53 +1,185 @@
 "use client";
 
-import Image from "next/image";
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-const galleryItems = [
+const resultVideos = [
   {
-    title: "1",
-    image: "/gallery/resultado-05.jpeg",
-    className: "md:col-span-2 md:row-span-2",
+    id: "gif-1",
+    title: "Brillo y terminación",
+    badge: "Abrillantado",
+    video: "/results/gif-01.mp4",
   },
   {
-    title: "2",
-    image: "/gallery/resultado-02.jpeg",
-    className: "md:col-span-1 md:row-span-1",
+    id: "gif-2",
+    title: "Tratamiento Cerámico 2 años",
+    badge: "Cerámico",
+    video: "/results/gif-02.mp4",
   },
   {
-    title: "3",
-    image: "/gallery/resultado-07.jpeg",
-    className: "md:col-span-1 md:row-span-1",
+    id: "gif-3",
+    title: "Lavado y Limpieza",
+    badge: "Interior y Exterior",
+    video: "/results/gif-03.mp4",
   },
   {
-    title: "4",
-    image: "/gallery/resultado-04.jpeg",
-    className: "md:col-span-1 md:row-span-1",
+    id: "gif-4",
+    title: "Lavado Premuim Completo",
+    badge: "Lavado Full",
+    video: "/results/gif-04.mp4",
   },
   {
-    title: "5",
-    image: "/gallery/resultado-marca.png",
-    className: "md:col-span-2 md:row-span-1",
+    id: "gif-5",
+    title: "Tratamiento Cerámico 3 años",
+    badge: "Cerámico",
+    video: "/results/gif-05.mp4",
+  },
+  {
+    id: "gif-6",
+    title: "Lavado Premium Completo",
+    badge: "Lavado Full",
+    video: "/results/gif-06.mp4",
   },
 ];
 
+type VideoRegistry = Record<string, HTMLVideoElement | null>;
+
+function VideoCard({
+  id,
+  title,
+  badge,
+  video,
+  activeId,
+  setActiveId,
+  registerVideo,
+  pauseAllExcept,
+}: {
+  id: string;
+  title: string;
+  badge: string;
+  video: string;
+  activeId: string | null;
+  setActiveId: React.Dispatch<React.SetStateAction<string | null>>;
+  registerVideo: (id: string, node: HTMLVideoElement | null) => void;
+  pauseAllExcept: (id: string) => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const playVideo = async () => {
+    if (!videoRef.current) return;
+    try {
+      await videoRef.current.play();
+    } catch {}
+  };
+
+  const pauseVideo = () => {
+    if (!videoRef.current) return;
+    videoRef.current.pause();
+    videoRef.current.currentTime = 0;
+  };
+
+  const handleMouseEnter = async () => {
+    pauseAllExcept(id);
+    setActiveId(id);
+    await playVideo();
+  };
+
+  const handleMouseLeave = () => {
+    pauseVideo();
+    if (activeId === id) setActiveId(null);
+  };
+
+  const handleTouchToggle = async () => {
+    if (!videoRef.current) return;
+
+    if (activeId === id) {
+      pauseVideo();
+      setActiveId(null);
+      return;
+    }
+
+    pauseAllExcept(id);
+    setActiveId(id);
+
+    try {
+      await videoRef.current.play();
+    } catch {}
+  };
+
+  return (
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleTouchToggle}
+      className="group relative cursor-pointer overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/3"
+    >
+      <div className="relative aspect-[16/10] min-h-[180px] overflow-hidden sm:min-h-[190px] lg:min-h-[210px]">
+        <video
+          ref={(node) => {
+            videoRef.current = node;
+            registerVideo(id, node);
+          }}
+          src={video}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+        />
+
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.14),rgba(0,0,0,0.76))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.10),transparent_28%)]" />
+
+        <div className="absolute left-3 top-3 md:left-4 md:top-4">
+          <span className="font-[family:var(--font-rajdhani)] inline-flex rounded-full border border-[#F2D58A]/20 bg-black/30 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E] backdrop-blur-sm md:px-3 md:text-[10px]">
+            {badge}
+          </span>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+          <h3 className="font-[family:var(--font-rajdhani)] text-[14px] font-semibold uppercase tracking-[0.04em] text-[#f7f3eb] md:text-[15px]">
+            {title}
+          </h3>
+        </div>
+
+        <div className="absolute inset-0 rounded-[1.35rem] ring-1 ring-inset ring-white/0 transition duration-300 group-hover:ring-[#F2D58A]/20" />
+      </div>
+    </div>
+  );
+}
+
 export function ResultsSection() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const videoMapRef = useRef<VideoRegistry>({});
+
+  const registerVideo = (id: string, node: HTMLVideoElement | null) => {
+    videoMapRef.current[id] = node;
+  };
+
+  const pauseAllExcept = (currentId: string) => {
+    Object.entries(videoMapRef.current).forEach(([id, node]) => {
+      if (!node || id === currentId) return;
+      node.pause();
+      node.currentTime = 0;
+    });
+  };
+
   return (
     <section
       id="resultados"
-      className="relative overflow-hidden bg-[linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.28))] py-20 lg:py-28"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.30))] py-14 md:py-16"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.06),transparent_20%)]" />
 
       <SectionContainer className="relative">
-        <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
+        <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
           <div>
             <SectionHeading
-              eyebrow="Galería"
-              title="Trabajos y Resultados"
-              description="Material visual del servicio y sus terminaciones."
+              eyebrow="Resultados"
+              title="Galería y resultados"
+              description="Una selección visual del nivel de detalle, terminación y presentación final."
             />
           </div>
 
@@ -56,50 +188,47 @@ export function ResultsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.35 }}
             transition={{ duration: 0.4 }}
-            className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 md:p-8 backdrop-blur-sm"
+            className="rounded-[1.4rem] border border-white/10 bg-white/3 p-4 md:p-5 backdrop-blur-sm"
           >
-            <p className="text-sm uppercase tracking-[0.25em] text-[#D6B25E]">
-              Resultados
-            </p>
-            <p className="mt-4 text-sm leading-7 text-white/70">
-              Fotografías reales de trabajos y resultados.
+            <div className="flex flex-wrap gap-2">
+              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-[#F2D58A]/20 bg-[#F2D58A]/8 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
+                Lavado
+              </span>
+              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                Pulido
+              </span>
+              <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                Encerado
+              </span>
+            </div>
+
+            <p className="mt-3 text-sm leading-6 text-white/70">
+              Clips reales para mostrar reflejo, corrección visual y acabado final
+              en los diferentes servicios.
             </p>
           </motion.div>
         </div>
 
-        <div className="mt-16 grid auto-rows-[200px] gap-4 md:grid-cols-3 md:auto-rows-[220px]">
-          {galleryItems.map((item, index) => (
-            <motion.article
-              key={item.title}
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {resultVideos.map((item, index) => (
+            <motion.div
+              key={item.id}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: index * 0.04 }}
-              className={`group relative overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] md:rounded-[1.6rem] ${item.className}`}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
             >
-              <div className="absolute inset-0">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                />
-              </div>
-
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04),rgba(0,0,0,0.12),rgba(0,0,0,0.72))]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.10),transparent_26%)]" />
-
-              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-[#D6B25E] md:text-[11px] md:tracking-[0.24em]">
-                  Trabajo destacado
-                </p>
-                <h3 className="mt-2 text-base font-semibold tracking-tight text-[#f7f3eb] md:text-lg">
-                  {item.title}
-                </h3>
-              </div>
-
-              <div className="absolute inset-0 rounded-[1.4rem] ring-1 ring-inset ring-white/0 transition duration-300 group-hover:ring-[#F2D58A]/20 md:rounded-[1.6rem]" />
-            </motion.article>
+              <VideoCard
+                id={item.id}
+                title={item.title}
+                badge={item.badge}
+                video={item.video}
+                activeId={activeId}
+                setActiveId={setActiveId}
+                registerVideo={registerVideo}
+                pauseAllExcept={pauseAllExcept}
+              />
+            </motion.div>
           ))}
         </div>
       </SectionContainer>

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Inter,
+  Orbitron,
+  Rajdhani,
+} from "next/font/google";
 import "./globals.css";
 
 const headingFont = Cormorant_Garamond({
@@ -11,6 +16,18 @@ const headingFont = Cormorant_Garamond({
 const bodyFont = Inter({
   subsets: ["latin"],
   variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+});
+
+const brandFont = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  weight: ["500", "700"],
+});
+
+const accentFont = Rajdhani({
+  subsets: ["latin"],
+  variable: "--font-rajdhani",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -56,9 +73,11 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${headingFont.variable} ${bodyFont.variable}`}
+      className={`${headingFont.variable} ${bodyFont.variable} ${brandFont.variable} ${accentFont.variable}`}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased font-[family:var(--font-body)] bg-black text-white">
+        {children}
+      </body>
     </html>
   );
 }
