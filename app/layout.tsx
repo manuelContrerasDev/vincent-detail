@@ -31,37 +31,47 @@ const accentFont = Rajdhani({
   weight: ["400", "500", "600", "700"],
 });
 
+const siteUrl = "https://vincentdetail.cl";
+const siteName = "Vincent.Detail";
+const siteTitle = "Vincent.Detail | Detailing automotriz en El Monte";
+const siteDescription =
+  "Servicios de detailing automotriz en El Monte y alrededores: packs de lavado, limpieza interior, pulido y tratamientos cerámicos con atención profesional y cotización directa.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vincentdetail.cl"),
-  title: "Vincent.Detail | Detailing automotriz",
-  description:
-    "Servicios de detailing automotriz, packs de lavado, limpieza interior, pulido y tratamientos cerámicos con atención profesional y cotización directa.",
-  applicationName: "Vincent.Detail",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  applicationName: siteName,
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "detailing automotriz",
+    "detailing automotriz en El Monte",
     "lavado premium",
     "tratamiento cerámico",
     "pulido de auto",
     "limpieza de tapiz",
     "Vincent Detail",
+    "detailing en Talagante",
+    "detailing a domicilio",
   ],
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "Vincent.Detail | Detailing automotriz",
-    description:
-      "Packs y servicios de detailing automotriz, limpieza interior, pulido y tratamientos cerámicos.",
+    title: siteTitle,
+    description: siteDescription,
     type: "website",
     locale: "es_CL",
-    siteName: "Vincent.Detail",
+    siteName,
+    url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vincent.Detail | Detailing automotriz",
-    description:
-      "Packs y servicios de detailing automotriz, limpieza interior, pulido y tratamientos cerámicos.",
+    title: siteTitle,
+    description: siteDescription,
   },
 };
 
@@ -75,7 +85,7 @@ export default function RootLayout({
       lang="es"
       className={`${headingFont.variable} ${bodyFont.variable} ${brandFont.variable} ${accentFont.variable}`}
     >
-      <body className="antialiased font-[family:var(--font-body)] bg-black text-white">
+      <body className="bg-black font-(--font-body) antialiased text-white">
         {children}
       </body>
     </html>

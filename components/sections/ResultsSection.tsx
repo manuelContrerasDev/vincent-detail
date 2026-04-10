@@ -20,13 +20,13 @@ const resultVideos = [
   },
   {
     id: "gif-3",
-    title: "Lavado y Limpieza",
-    badge: "Interior y Exterior",
+    title: "Lavado y limpieza",
+    badge: "Interior y exterior",
     video: "/results/gif-03.mp4",
   },
   {
     id: "gif-4",
-    title: "Lavado Premuim Completo",
+    title: "Lavado Premium Completo",
     badge: "Lavado Full",
     video: "/results/gif-04.mp4",
   },
@@ -46,6 +46,17 @@ const resultVideos = [
 
 type VideoRegistry = Record<string, HTMLVideoElement | null>;
 
+type VideoCardProps = {
+  id: string;
+  title: string;
+  badge: string;
+  video: string;
+  activeId: string | null;
+  setActiveId: React.Dispatch<React.SetStateAction<string | null>>;
+  registerVideo: (id: string, node: HTMLVideoElement | null) => void;
+  pauseAllExcept: (id: string) => void;
+};
+
 function VideoCard({
   id,
   title,
@@ -55,27 +66,22 @@ function VideoCard({
   setActiveId,
   registerVideo,
   pauseAllExcept,
-}: {
-  id: string;
-  title: string;
-  badge: string;
-  video: string;
-  activeId: string | null;
-  setActiveId: React.Dispatch<React.SetStateAction<string | null>>;
-  registerVideo: (id: string, node: HTMLVideoElement | null) => void;
-  pauseAllExcept: (id: string) => void;
-}) {
+}: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const playVideo = async () => {
     if (!videoRef.current) return;
+
     try {
       await videoRef.current.play();
-    } catch {}
+    } catch {
+      // Ignore autoplay/playback errors from the browser.
+    }
   };
 
   const pauseVideo = () => {
     if (!videoRef.current) return;
+
     videoRef.current.pause();
     videoRef.current.currentTime = 0;
   };
@@ -88,10 +94,13 @@ function VideoCard({
 
   const handleMouseLeave = () => {
     pauseVideo();
-    if (activeId === id) setActiveId(null);
+
+    if (activeId === id) {
+      setActiveId(null);
+    }
   };
 
-  const handleTouchToggle = async () => {
+  const handleToggle = async () => {
     if (!videoRef.current) return;
 
     if (activeId === id) {
@@ -105,15 +114,27 @@ function VideoCard({
 
     try {
       await videoRef.current.play();
-    } catch {}
+    } catch {
+      // Ignore playback errors from the browser.
+    }
   };
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={activeId === id}
+      aria-label={`${title}, ${badge}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={handleTouchToggle}
-      className="group relative cursor-pointer overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/3"
+      onClick={handleToggle}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          void handleToggle();
+        }
+      }}
+      className="group relative cursor-pointer overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/3 outline-none focus-visible:ring-2 focus-visible:ring-[#F2D58A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111f]"
     >
       <div className="relative aspect-[16/10] min-h-[180px] overflow-hidden sm:min-h-[190px] lg:min-h-[210px]">
         <video
@@ -126,11 +147,18 @@ function VideoCard({
           loop
           playsInline
           preload="metadata"
+          aria-hidden="true"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.14),rgba(0,0,0,0.76))]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.10),transparent_28%)]" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.14),rgba(0,0,0,0.76))]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.10),transparent_28%)]"
+        />
 
         <div className="absolute left-3 top-3 md:left-4 md:top-4">
           <span className="font-[family:var(--font-rajdhani)] inline-flex rounded-full border border-[#F2D58A]/20 bg-black/30 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E] backdrop-blur-sm md:px-3 md:text-[10px]">
@@ -144,7 +172,10 @@ function VideoCard({
           </h3>
         </div>
 
-        <div className="absolute inset-0 rounded-[1.35rem] ring-1 ring-inset ring-white/0 transition duration-300 group-hover:ring-[#F2D58A]/20" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 rounded-[1.35rem] ring-1 ring-inset ring-white/0 transition duration-300 group-hover:ring-[#F2D58A]/20"
+        />
       </div>
     </div>
   );
@@ -169,13 +200,17 @@ export function ResultsSection() {
   return (
     <section
       id="resultados"
+      aria-labelledby="results-heading"
       className="relative overflow-hidden bg-[linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.30))] py-14 md:py-16"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.06),transparent_20%)]" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.06),transparent_20%)]"
+      />
 
       <SectionContainer className="relative">
         <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-          <div>
+          <div id="results-heading">
             <SectionHeading
               eyebrow="Resultados"
               title="Galería y resultados"
@@ -188,7 +223,7 @@ export function ResultsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.35 }}
             transition={{ duration: 0.4 }}
-            className="rounded-[1.4rem] border border-white/10 bg-white/3 p-4 md:p-5 backdrop-blur-sm"
+            className="rounded-[1.4rem] border border-white/10 bg-white/3 p-4 backdrop-blur-sm md:p-5"
           >
             <div className="flex flex-wrap gap-2">
               <span className="font-[family:var(--font-rajdhani)] rounded-full border border-[#F2D58A]/20 bg-[#F2D58A]/8 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
@@ -212,27 +247,30 @@ export function ResultsSection() {
           </motion.div>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {resultVideos.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-            >
-              <VideoCard
-                id={item.id}
-                title={item.title}
-                badge={item.badge}
-                video={item.video}
-                activeId={activeId}
-                setActiveId={setActiveId}
-                registerVideo={registerVideo}
-                pauseAllExcept={pauseAllExcept}
-              />
-            </motion.div>
-          ))}
+        <div className="mt-8">
+          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {resultVideos.map((item, index) => (
+              <li key={item.id}>
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                >
+                  <VideoCard
+                    id={item.id}
+                    title={item.title}
+                    badge={item.badge}
+                    video={item.video}
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                    registerVideo={registerVideo}
+                    pauseAllExcept={pauseAllExcept}
+                  />
+                </motion.div>
+              </li>
+            ))}
+          </ul>
         </div>
       </SectionContainer>
     </section>

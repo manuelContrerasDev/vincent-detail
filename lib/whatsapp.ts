@@ -1,9 +1,12 @@
 import { siteConfig } from "@/content/site";
 
 export function getWhatsAppUrl(message?: string): string {
-  const base = `https://wa.me/${siteConfig.whatsapp}`;
+  const phone = siteConfig.whatsapp;
+  const baseUrl = `https://wa.me/${phone}`;
 
-  if (!message) return base;
+  if (!message) {
+    return baseUrl;
+  }
 
-  return `${base}?text=${encodeURIComponent(message)}`;
+  return `${baseUrl}?text=${encodeURIComponent(message)}`;
 }

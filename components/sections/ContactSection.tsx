@@ -26,12 +26,19 @@ function TikTokLogo(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export function ContactSection() {
+  const whatsappHref = getWhatsAppUrl(
+    "Hola, quiero más información sobre los servicios de Vincent.Detail."
+  );
+
   return (
     <section
       id="contacto"
       className="relative overflow-hidden py-16 md:py-20 lg:py-24"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,213,138,0.08),transparent_18%)]" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,213,138,0.08),transparent_18%)]"
+      />
 
       <SectionContainer className="relative">
         <motion.div
@@ -47,7 +54,7 @@ export function ContactSection() {
             </p>
 
             <h2 className="font-[family:var(--font-heading)] mt-3 text-3xl font-semibold leading-[1.02] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
-              Cotiza con Nosotros
+              Cotiza con {siteConfig.name}
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-white/72 md:text-base">
@@ -62,14 +69,12 @@ export function ContactSection() {
               className="mt-7 flex justify-center"
             >
               <CTAButton
-                href={getWhatsAppUrl(
-                  "Hola, quiero más información sobre los servicios de Vincent.Detail."
-                )}
+                href={whatsappHref}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="min-w-[220px]"
               >
-                <MessageCircle className="mr-2 h-4 w-4" />
+                <MessageCircle aria-hidden="true" className="mr-2 h-4 w-4" />
                 WhatsApp
               </CTAButton>
             </motion.div>
@@ -78,36 +83,43 @@ export function ContactSection() {
               <a
                 href={siteConfig.instagramUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label={`Visitar Instagram de ${siteConfig.name}`}
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
                 <InstagramLogo className="h-4 w-4 text-[#F2D58A]" />
                 Instagram
               </a>
 
-              <span className="hidden h-4 w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.35),transparent)] sm:block" />
+              <span
+                aria-hidden="true"
+                className="hidden h-4 w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.35),transparent)] sm:block"
+              />
 
               <a
                 href={siteConfig.tiktokUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label={`Visitar TikTok de ${siteConfig.name}`}
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
                 <TikTokLogo className="h-4 w-4 text-[#F2D58A]" />
                 TikTok
               </a>
 
-              <span className="hidden h-4 w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.35),transparent)] sm:block" />
+              <span
+                aria-hidden="true"
+                className="hidden h-4 w-px bg-[linear-gradient(180deg,transparent,rgba(242,213,138,0.35),transparent)] sm:block"
+              />
 
               <a
-                href={getWhatsAppUrl(
-                  "Hola, quiero más información sobre los servicios de Vincent.Detail."
-                )}
+                href={whatsappHref}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label={`Escribir por WhatsApp a ${siteConfig.name}`}
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
-                <MessageCircle className="h-4 w-4 text-[#F2D58A]" />
+                <MessageCircle aria-hidden="true" className="h-4 w-4 text-[#F2D58A]" />
                 WhatsApp
               </a>
             </div>

@@ -18,6 +18,10 @@ export function ServiceCard({
   price,
   tag,
 }: ServiceCardProps) {
+  const whatsappHref = getWhatsAppUrl(
+    `Hola, quiero cotizar el servicio ${title} de Vincent.Detail.`
+  );
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 18 }}
@@ -28,21 +32,24 @@ export function ServiceCard({
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-[#D6B25E]">
+          <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E]">
             {tag}
           </p>
 
-          <h3 className="mt-3 text-[1.35rem] font-semibold leading-[1.06] tracking-tight text-[#f7f3eb] md:text-[1.5rem]">
+          <h3 className="mt-3 font-[family:var(--font-rajdhani)] text-[1.35rem] font-semibold leading-[1.06] tracking-tight text-[#f7f3eb] md:text-[1.5rem]">
             {title}
           </h3>
         </div>
 
-        <div className="w-fit shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[#F2D58A]">
+        <div className="w-fit shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-[family:var(--font-rajdhani)] text-xs font-medium uppercase tracking-[0.08em] text-[#F2D58A]">
           {price}
         </div>
       </div>
 
-      <div className="mt-5 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]" />
+      <div
+        aria-hidden="true"
+        className="mt-5 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]"
+      />
 
       <p className="mt-5 text-sm leading-7 text-white/70">
         {description}
@@ -50,14 +57,14 @@ export function ServiceCard({
 
       <div className="mt-6">
         <CTAButton
-          href={getWhatsAppUrl(`Hola, quiero cotizar el servicio ${title} de Vincent.Detail.`)}
+          href={whatsappHref}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           variant="secondary"
           className="w-full justify-between"
         >
           Solicitar información
-          <ArrowUpRight className="h-4 w-4" />
+          <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
         </CTAButton>
       </div>
     </motion.article>

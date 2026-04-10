@@ -14,10 +14,11 @@ export const packs: PackItem[] = [
     name: "Pack Bronce",
     slug: "bronce",
     image: "/images/packs/pack-bronce.jpeg",
-    summary: "Pulido abrillantado en 1 paso, protección sintética de 6 meses",
+    summary:
+      "Pulido abrillantado en 1 paso y protección sintética de hasta 6 meses.",
     accent: "bronce",
     highlights: [
-      "Encerado Hidrofobico",
+      "Encerado hidrofóbico",
       "Detailing interior full",
       "Limpieza de tapiz tela/cuero",
       "Presentación visual renovada",
@@ -27,7 +28,8 @@ export const packs: PackItem[] = [
     name: "Pack Plata",
     slug: "plata",
     image: "/images/packs/pack-plata.jpeg",
-    summary: "Añade descontaminado exterior y una corrección ligera para mejorar terminación.",
+    summary:
+      "Incluye descontaminado exterior y una corrección ligera para mejorar brillo y terminación.",
     accent: "plata",
     highlights: [
       "Descontaminado exterior",
@@ -39,11 +41,12 @@ export const packs: PackItem[] = [
     name: "Pack Oro",
     slug: "oro",
     image: "/images/packs/pack-oro.jpeg",
-    summary: "Pack completo de protección cerámica y plásticos interiores/exteriores, vidrios y coating cerámico de carroceria",
+    summary:
+      "Pack completo con protección cerámica, tratamiento de plásticos interiores y exteriores, vidrios y coating cerámico de carrocería.",
     accent: "oro",
     highlights: [
       "Pulido profundo de 2 pasos",
-      "Tratamiento cerámico 2 años - 3d",
+      "Tratamiento cerámico 2 años - 3D",
       "Nivel avanzado de protección",
     ],
   },
@@ -51,7 +54,8 @@ export const packs: PackItem[] = [
     name: "Pack Diamante",
     slug: "diamante",
     image: "/images/packs/pack-diamante.jpeg",
-    summary: "Tratamiento cerámico con Grafeno, incluye la proteción oro.",
+    summary:
+      "Tratamiento cerámico con grafeno que incorpora todo lo incluido en el Pack Oro.",
     accent: "diamante",
     highlights: [
       "Grafeno de 3 años",

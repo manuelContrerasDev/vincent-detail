@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type CTAButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -17,8 +17,8 @@ export function CTAButton({
       className={cn(
         "relative inline-flex items-center justify-center overflow-hidden rounded-2xl px-5 py-3 md:px-6 md:py-3.5",
         "font-[family:var(--font-rajdhani)] text-[13px] font-semibold uppercase tracking-[0.14em]",
-        "transition duration-200 outline-none",
-        "focus-visible:ring-2 focus-visible:ring-[#F2D58A] focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+        "outline-none transition-all duration-200",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D58A] focus-visible:ring-offset-2 focus-visible:ring-offset-black",
         variant === "primary" &&
           [
             "border border-[#F2D58A]/20",
@@ -26,9 +26,9 @@ export function CTAButton({
             "text-black",
             "shadow-[0_12px_30px_rgba(0,0,0,0.22)]",
             "before:absolute before:inset-0 before:bg-black/0 before:transition before:duration-200",
-            "hover:before:bg-black/18",
-            "hover:shadow-[0_16px_38px_rgba(0,0,0,0.30)]",
             "hover:-translate-y-[1px]",
+            "hover:shadow-[0_16px_38px_rgba(0,0,0,0.30)]",
+            "hover:before:bg-black/18",
           ].join(" "),
         variant === "secondary" &&
           [
@@ -36,9 +36,9 @@ export function CTAButton({
             "bg-white/5",
             "text-white",
             "shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
-            "hover:bg-white/10",
-            "hover:border-white/20",
             "hover:-translate-y-[1px]",
+            "hover:border-white/20",
+            "hover:bg-white/10",
           ].join(" "),
         className
       )}

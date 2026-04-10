@@ -33,13 +33,17 @@ export function CoverageSection() {
   return (
     <section
       id="cobertura"
+      aria-labelledby="coverage-heading"
       className="relative border-y border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))] py-16 md:py-20 lg:py-24"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(242,213,138,0.06),transparent_18%)]" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(242,213,138,0.06),transparent_18%)]"
+      />
 
       <SectionContainer className="relative">
         <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
-          <div>
+          <div id="coverage-heading">
             <SectionHeading
               eyebrow="Cobertura"
               title="Localidades"
@@ -52,10 +56,10 @@ export function CoverageSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.35 }}
             transition={{ duration: 0.4 }}
-            className="rounded-[1.45rem] border border-white/10 bg-white/3 p-4 md:p-5 backdrop-blur-sm"
+            className="rounded-[1.45rem] border border-white/10 bg-white/3 p-4 backdrop-blur-sm md:p-5"
           >
             <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E]">
-              Servicio a Domicilio
+              Servicio a domicilio
             </p>
           </motion.div>
         </div>
@@ -68,12 +72,18 @@ export function CoverageSection() {
             transition={{ duration: 0.42 }}
             className="relative overflow-hidden rounded-[1.65rem] border border-white/10 bg-black/15 p-5 md:p-6"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,213,138,0.08),transparent_26%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))]" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,213,138,0.08),transparent_26%)]"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))]"
+            />
 
             <div className="relative z-10 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(242,213,138,0.14),rgba(169,123,30,0.12))]">
-                <Route className="h-5 w-5 text-[#F2D58A]" />
+                <Route aria-hidden="true" className="h-5 w-5 text-[#F2D58A]" />
               </div>
 
               <div>
@@ -87,11 +97,15 @@ export function CoverageSection() {
             </div>
 
             <div className="relative mt-5 h-[300px] overflow-hidden rounded-[1.3rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] md:h-[340px]">
-              <div className="absolute inset-0 opacity-30 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px]" />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px] opacity-30"
+              />
 
               <svg
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
+                aria-hidden="true"
                 className="absolute inset-0 h-full w-full"
               >
                 <path
@@ -133,12 +147,13 @@ export function CoverageSection() {
                 >
                   <div className="relative -translate-x-1/2 -translate-y-1/2">
                     <motion.div
+                      aria-hidden="true"
                       animate={{ scale: [1, 1.45, 1], opacity: [0.35, 0, 0.35] }}
                       transition={{ duration: 2.2, repeat: Infinity, delay: index * 0.2 }}
                       className="absolute inset-0 rounded-full border border-[#F2D58A]/30"
                     />
                     <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[#F2D58A]/20 bg-black/55 backdrop-blur-sm">
-                      <MapPin className="h-4 w-4 text-[#F2D58A]" />
+                      <MapPin aria-hidden="true" className="h-4 w-4 text-[#F2D58A]" />
                     </div>
                     <span className="font-[family:var(--font-rajdhani)] absolute left-1/2 top-9 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-black/55 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/80">
                       {stop.label}
@@ -159,21 +174,27 @@ export function CoverageSection() {
             <div className="absolute inset-0">
               <Image
                 src="/gallery/coverage-bg.png"
-                alt="Vincent Detail Tundra mobile detail"
+                alt="Servicio de detailing automotriz a domicilio"
                 fill
                 sizes="(max-width: 1023px) 100vw, 50vw"
                 className="object-cover object-center"
               />
             </div>
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.52),rgba(0,0,0,0.56),rgba(0,0,0,0.82))]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.12),transparent_24%)]" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.52),rgba(0,0,0,0.56),rgba(0,0,0,0.82))]"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.12),transparent_24%)]"
+            />
 
             <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-6">
               <div>
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(242,213,138,0.14),rgba(169,123,30,0.12))] backdrop-blur-sm">
-                    <ShieldCheck className="h-5 w-5 text-[#F2D58A]" />
+                    <ShieldCheck aria-hidden="true" className="h-5 w-5 text-[#F2D58A]" />
                   </div>
 
                   <div>
@@ -191,40 +212,38 @@ export function CoverageSection() {
                     Zonas principales
                   </p>
 
-                  <div className="mt-3 flex flex-wrap gap-2.5">
+                  <ul className="mt-3 flex flex-wrap gap-2.5">
                     {primaryZones.map((zone) => (
-                      <span
-                        key={zone}
-                        className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/84"
-                      >
-                        {zone}
-                      </span>
+                      <li key={zone}>
+                        <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/84">
+                          {zone}
+                        </span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
-                <div className="mt-4 rounded-[1.25rem] border border-white/10 bg-black/24 p-4 backdrop-blur-sm py-2">
+                <div className="mt-4 rounded-[1.25rem] border border-white/10 bg-black/24 p-4 py-2 backdrop-blur-sm">
                   <p className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D6B25E]">
                     Cobertura extendida
                   </p>
 
-                  <div className="mt-3 flex flex-wrap gap-2.5">
+                  <ul className="mt-3 flex flex-wrap gap-2.5">
                     {secondaryZones.map((zone) => (
-                      <span
-                        key={zone}
-                        className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-black/18 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-white/72"
-                      >
-                        {zone}
-                      </span>
+                      <li key={zone}>
+                        <span className="font-[family:var(--font-rajdhani)] rounded-full border border-white/10 bg-black/18 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-white/72">
+                          {zone}
+                        </span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[1.2rem] border border-white/10 bg-black/28 p-4 backdrop-blur-sm">
                   <div className="flex items-center gap-2">
-                    <Route className="h-4 w-4 text-[#F2D58A]" />
+                    <Route aria-hidden="true" className="h-4 w-4 text-[#F2D58A]" />
                     <p className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
                       Atención
                     </p>
@@ -236,7 +255,7 @@ export function CoverageSection() {
 
                 <div className="rounded-[1.2rem] border border-white/10 bg-black/28 p-4 backdrop-blur-sm">
                   <div className="flex items-center gap-2">
-                    <Clock3 className="h-4 w-4 text-[#F2D58A]" />
+                    <Clock3 aria-hidden="true" className="h-4 w-4 text-[#F2D58A]" />
                     <p className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
                       Confirmación
                     </p>

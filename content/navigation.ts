@@ -1,8 +1,8 @@
 export const navigation = [
-  { label: "INICIO", href: "#inicio" },
-  { label: "PACKS", href: "#packs" },
-  { label: "SERVICIOS", href: "#servicios" },
-  { label: "GALERIA", href: "#resultados" },
-  { label: "LOCALIDAD", href: "#cobertura" },
-  { label: "CONTACTO", href: "#contacto" },
-];
+  { label: "Inicio", href: "#inicio" },
+  { label: "Packs", href: "#packs" },
+  { label: "Servicios", href: "#servicios" },
+  { label: "Galería", href: "#resultados" },
+  { label: "Cobertura", href: "#cobertura" },
+  { label: "Contacto", href: "#contacto" },
+] as const;

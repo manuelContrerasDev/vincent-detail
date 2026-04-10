@@ -1,14 +1,12 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { BenefitsSection } from "@/components/sections/BenefitsSection";
+import { FirstFoldSection } from "@/components/sections/FirstFoldSection";
 import { PacksSection } from "@/components/sections/PacksSection";
 import { ServicesCatalogSection } from "@/components/sections/ServicesCatalogSection";
 import { ResultsSection } from "@/components/sections/ResultsSection";
 import { CoverageSection } from "@/components/sections/CoverageSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
-import { FirstFoldSection } from "@/components/sections/FirstFoldSection";
 
 export default function Home() {
   return (

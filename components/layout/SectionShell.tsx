@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 
@@ -7,6 +7,7 @@ type SectionShellProps = {
   children: ReactNode;
   className?: string;
   containerClassName?: string;
+  ariaLabelledBy?: string;
 };
 
 export function SectionShell({
@@ -14,9 +15,14 @@ export function SectionShell({
   children,
   className,
   containerClassName,
+  ariaLabelledBy,
 }: SectionShellProps) {
   return (
-    <section id={id} className={cn("py-16 md:py-20 lg:py-24", className)}>
+    <section
+      id={id}
+      aria-labelledby={ariaLabelledBy}
+      className={cn("py-16 md:py-20 lg:py-24", className)}
+    >
       <SectionContainer className={containerClassName}>
         {children}
       </SectionContainer>

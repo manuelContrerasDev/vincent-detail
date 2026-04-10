@@ -9,56 +9,56 @@ export const services: ServiceItem[] = [
   {
     title: "Lavado Básico",
     description:
-      "Mantención exterior orientada a la mantención de cerámico limpieza general y buena presentación del vehículo",
+      "Mantención exterior enfocada en limpieza general, cuidado de tratamientos cerámicos y buena presentación del vehículo.",
     price: "Desde $30.000",
     tag: "Mantención",
   },
   {
     title: "Lavado Premium",
     description:
-      "Limpieza interior y exterior de detailing con una terminación pensada para cuidar y proteger tu vehículo",
+      "Limpieza interior y exterior con enfoque de detailing, pensada para cuidar, proteger y realzar la presentación del vehículo.",
     price: "Desde $50.000",
     tag: "Interior + Exterior",
   },
   {
     title: "Limpieza de Tapiz",
     description:
-      "Tratamiento orientado a higiene, recuperación visual y limpieza profunda de superficies interiores",
+      "Tratamiento orientado a higiene, recuperación visual y limpieza profunda de superficies interiores.",
     price: "Desde $45.000",
     tag: "Interior",
   },
-    {
-    title: "Mantención Cerámico/Booster/Cera hidrofobica",
+  {
+    title: "Mantención Cerámica / Booster / Cera Hidrofóbica",
     description:
-      "Servicio orientado a la mantención de tratamiento cerámico para garantizar un acabado perfecto post tratamiento cerámico",
+      "Servicio enfocado en mantener tratamientos cerámicos y reforzar protección, brillo y terminación del vehículo.",
     price: "Desde $80.000",
     tag: "Exterior",
   },
   {
     title: "Corrección de Pintura",
     description:
-      "Pulido orientado a mejorar reflejo, profundidad y presencia estética de la carrocería",
+      "Pulido orientado a mejorar reflejo, profundidad y presencia estética de la carrocería.",
     price: "Desde $140.000",
     tag: "Corrección",
   },
   {
-    title: "Tratamiento Cerámico 2 años",
+    title: "Tratamiento Cerámico 2 Años",
     description:
-      "Corrección de pintura de dos pasos para eliminar rayas, realzar el brillo y protección cerámica de 2 años",
+      "Corrección de pintura en dos pasos para reducir rayas, realzar el brillo y aplicar protección cerámica de hasta 2 años.",
     price: "Desde $220.000",
     tag: "Protección",
   },
   {
-    title: "Tratamiento Cerámico 3 años - Grafeno",
+    title: "Tratamiento Cerámico 3 Años - Grafeno",
     description:
-      "Protección avanzada pensada para mayor duración y una terminación de nivel superior en 3 pasos",
+      "Protección avanzada pensada para mayor duración, mejor terminación y un nivel superior de acabado.",
     price: "Desde $250.000",
-    tag: "Protección avanzada - Grafeno",
+    tag: "Protección Avanzada - Grafeno",
   },
   {
-    title: "Tratamiento Cerámico Nasiol 3 años - 10h",
+    title: "Tratamiento Cerámico Nasiol 3 Años - 10H",
     description:
-      "Protección cerámica avanzada con tecnología Nasiol para mayor durabilidad, terminación profesional y mayor dureza para mayor protección y brillo extremo",
+      "Protección cerámica avanzada con tecnología Nasiol, pensada para mayor durabilidad, brillo extremo y una terminación profesional.",
     price: "Desde $280.000",
     tag: "Protección Superior - Nasiol",
   },

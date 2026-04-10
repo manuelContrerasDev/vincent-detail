@@ -74,16 +74,23 @@ export function PackVisualCard({
   highlights,
 }: PackVisualCardProps) {
   const styles = ACCENT_STYLES[accent];
+  const whatsappHref = getWhatsAppUrl(
+    `Hola, quiero cotizar el ${name} de Vincent.Detail.`
+  );
 
   return (
     <article
       className={cn(
-        "group relative overflow-hidden rounded-[1.45rem] border bg-black transition duration-300 shadow-[0_14px_36px_rgba(0,0,0,0.20)] md:rounded-[1.65rem]",
+        "group relative overflow-hidden rounded-[1.45rem] border bg-black shadow-[0_14px_36px_rgba(0,0,0,0.20)] transition duration-300 md:rounded-[1.65rem]",
         styles.border
       )}
     >
-      <div className="absolute inset-0 rounded-[1.45rem] ring-1 ring-inset ring-white/6 transition duration-300 md:rounded-[1.65rem]" />
       <div
+        aria-hidden="true"
+        className="absolute inset-0 rounded-[1.45rem] ring-1 ring-inset ring-white/6 transition duration-300 md:rounded-[1.65rem]"
+      />
+      <div
+        aria-hidden="true"
         className={cn(
           "absolute inset-0 rounded-[1.45rem] ring-1 ring-inset ring-transparent transition duration-300 md:rounded-[1.65rem]",
           styles.ring
@@ -100,12 +107,18 @@ export function PackVisualCard({
           className="object-cover transition duration-700 group-hover:scale-[1.03]"
         />
 
-        <div className={cn("absolute inset-0", styles.glow)} />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.16),rgba(0,0,0,0.62))]" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0))] md:h-28" />
+        <div aria-hidden="true" className={cn("absolute inset-0", styles.glow)} />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.16),rgba(0,0,0,0.62))]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0))] md:h-28"
+        />
 
         <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5 lg:p-6">
-          <div className="rounded-[1.1rem] border border-white/14 bg-black/70 p-3.5 sm:p-4 md:p-5 lg:p-6 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.20)]">
+          <div className="rounded-[1.1rem] border border-white/14 bg-black/70 p-3.5 shadow-[0_12px_28px_rgba(0,0,0,0.20)] backdrop-blur-md sm:p-4 md:p-5 lg:p-6">
             <div className="flex flex-col gap-3 sm:gap-4">
               <div className="flex flex-col items-start gap-2 sm:gap-3">
                 <span
@@ -127,7 +140,10 @@ export function PackVisualCard({
                 </div>
               </div>
 
-              <div className="h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.16),rgba(255,255,255,0.10),transparent)]" />
+              <div
+                aria-hidden="true"
+                className="h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.16),rgba(255,255,255,0.10),transparent)]"
+              />
 
               <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 {highlights.map((item) => (
@@ -138,7 +154,10 @@ export function PackVisualCard({
                         styles.checkBg
                       )}
                     >
-                      <Check className={cn("h-3 w-3 sm:h-3.5 sm:w-3.5", styles.check)} />
+                      <Check
+                        aria-hidden="true"
+                        className={cn("h-3 w-3 sm:h-3.5 sm:w-3.5", styles.check)}
+                      />
                     </span>
                     <span className="text-[12px] leading-5 text-white/84 sm:text-[13px] sm:leading-6 md:text-[14px] xl:text-[15px]">
                       {item}
@@ -149,9 +168,9 @@ export function PackVisualCard({
 
               <div className="pt-1 sm:pt-2">
                 <CTAButton
-                  href={getWhatsAppUrl(`Hola, quiero cotizar el ${name} de Vincent.Detail.`)}
+                  href={whatsappHref}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="w-full px-4 py-3 text-[11px] sm:text-[12px] md:py-3.5 md:text-[13px]"
                 >
                   Cotizar

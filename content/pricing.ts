@@ -1,4 +1,23 @@
-export const pricing = {
+export type PricingRow = {
+  vehicle: string;
+  price: string;
+};
+
+export type PricingTable = {
+  title: string;
+  rows: PricingRow[];
+};
+
+export type PricingMap = {
+  lavadoBasico: PricingTable;
+  lavadoPremium: PricingTable;
+  limpiezaTapiz: PricingTable;
+  pulido: PricingTable;
+  ceramico2: PricingTable;
+  ceramico3: PricingTable;
+};
+
+export const pricing: PricingMap = {
   lavadoBasico: {
     title: "Lavado Básico",
     rows: [
