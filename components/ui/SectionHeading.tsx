@@ -28,17 +28,17 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.28em] text-[#D6B25E] md:text-[12px] md:tracking-[0.32em]">
+        <p className="font-[family:var(--font-rajdhani)] text-[12px] font-bold uppercase tracking-[0.24em] text-[#D6B25E] md:text-[13px] md:tracking-[0.28em]">
           {eyebrow}
         </p>
       ) : null}
 
-      <HeadingTag className="font-[family:var(--font-heading)] mt-3 text-3xl font-semibold leading-[1.02] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
+      <HeadingTag className="mt-3 font-[family:var(--font-heading)] text-[32px] font-bold uppercase leading-[1.02] tracking-[-0.03em] text-[#f7f3eb] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[38px] md:text-[46px] lg:text-[54px]">
         {title}
       </HeadingTag>
 
       {description ? (
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 md:text-base md:leading-8">
+        <p className="mt-4 max-w-2xl font-[family:var(--font-body)] text-[15px] leading-7 text-white/72 sm:text-[16px] md:text-[17px] md:leading-8">
           {description}
         </p>
       ) : null}

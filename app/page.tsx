@@ -7,15 +7,17 @@ import { ResultsSection } from "@/components/sections/ResultsSection";
 import { CoverageSection } from "@/components/sections/CoverageSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
+import { QuoteBannerSection } from "@/components/sections/QuoteBannerSection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#07111f] text-[#f6f2ea]">
+    <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#f6f2ea]">
       <Header />
       <FirstFoldSection />
       <PacksSection />
       <ServicesCatalogSection />
       <ResultsSection />
+      <QuoteBannerSection />
       <CoverageSection />
       <ContactSection />
       <Footer />

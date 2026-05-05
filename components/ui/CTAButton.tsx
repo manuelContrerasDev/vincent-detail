@@ -1,19 +1,61 @@
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+"use client";
+
+import type {
+  AnchorHTMLAttributes,
+  MouseEvent,
+  ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
+import { trackEvent, type TrackingEvent } from "@/lib/tracking";
 
 type CTAButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode;
   variant?: "primary" | "secondary";
+  trackingEvent?: TrackingEvent;
+  trackingLabel?: string;
+  trackingSection?: string;
 };
+
+function isWhatsAppHref(href?: AnchorHTMLAttributes<HTMLAnchorElement>["href"]) {
+  if (!href || typeof href !== "string") return false;
+
+  return (
+    href.includes("wa.me") ||
+    href.includes("whatsapp.com") ||
+    href.includes("api.whatsapp")
+  );
+}
 
 export function CTAButton({
   children,
   className,
   variant = "primary",
+  trackingEvent,
+  trackingLabel,
+  trackingSection,
+  href,
+  onClick,
   ...props
 }: CTAButtonProps) {
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    const eventName =
+      trackingEvent ?? (isWhatsAppHref(href) ? "whatsapp_click" : undefined);
+
+    if (eventName) {
+      trackEvent(eventName, {
+        label: trackingLabel,
+        section: trackingSection ?? "cta",
+        href: typeof href === "string" ? href : undefined,
+      });
+    }
+
+    onClick?.(event);
+  };
+
   return (
     <a
+      href={href}
+      onClick={handleClick}
       className={cn(
         "relative inline-flex items-center justify-center overflow-hidden rounded-2xl px-5 py-3 md:px-6 md:py-3.5",
         "font-[family:var(--font-rajdhani)] text-[13px] font-semibold uppercase tracking-[0.14em]",

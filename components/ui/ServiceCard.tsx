@@ -26,45 +26,58 @@ export function ServiceCard({
     <motion.article
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.4 }}
-      className="group rounded-[1.35rem] border border-white/10 bg-black/10 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-[#D6B25E]/20 hover:bg-black/15 md:rounded-[1.4rem]"
+      viewport={{ once: true, amount: 0.22 }}
+      transition={{ duration: 0.45 }}
+      className="group relative isolate flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#080808]/92 p-4 shadow-[0_14px_38px_rgba(0,0,0,0.30)] ring-1 ring-white/[0.03] transition duration-300 hover:-translate-y-1 hover:border-[#D6B25E]/35 hover:shadow-[0_22px_60px_rgba(0,0,0,0.45)] sm:p-5 md:rounded-[1.5rem]"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.12),transparent_34%)] opacity-80 transition duration-300 group-hover:opacity-100"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(242,213,138,0.26),transparent)]"
+      />
+
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 text-left">
+          <p className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E] sm:text-[11px]">
             {tag}
           </p>
 
-          <h3 className="mt-3 font-[family:var(--font-rajdhani)] text-[1.35rem] font-semibold leading-[1.06] tracking-tight text-[#f7f3eb] md:text-[1.5rem]">
+          <h3 className="mt-3 font-[family:var(--font-rajdhani)] text-[21px] font-bold uppercase leading-[1.05] tracking-[0.045em] text-[#F7F3EB] drop-shadow-[0_4px_16px_rgba(0,0,0,0.65)] sm:text-[24px] md:text-[26px]">
             {title}
           </h3>
         </div>
 
-        <div className="w-fit shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-[family:var(--font-rajdhani)] text-xs font-medium uppercase tracking-[0.08em] text-[#F2D58A]">
+        <div className="shrink-0 rounded-full border border-[#D6B25E]/20 bg-[#D6B25E]/10 px-3 py-1.5 font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#F2D58A] shadow-[0_8px_22px_rgba(0,0,0,0.22)] sm:text-[11px]">
           {price}
         </div>
       </div>
 
       <div
         aria-hidden="true"
-        className="mt-5 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]"
+        className="my-5 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.20),rgba(255,255,255,0.10),transparent)]"
       />
 
-      <p className="mt-5 text-sm leading-7 text-white/70">
+      <p className="text-[13px] leading-6 text-white/74 sm:text-[14px] sm:leading-7 md:text-[15px]">
         {description}
       </p>
 
-      <div className="mt-6">
+      <div className="mt-auto pt-6">
         <CTAButton
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
           variant="secondary"
-          className="w-full justify-between"
+          className="group/button w-full justify-between border-white/15 bg-black/25 px-4 py-3 font-[family:var(--font-rajdhani)] text-[11px] uppercase tracking-[0.12em] backdrop-blur-sm transition duration-300 hover:border-[#D6B25E]/35 hover:bg-[#D6B25E]/10 sm:text-[12px]"
         >
           Solicitar información
-          <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+          <ArrowUpRight
+            aria-hidden="true"
+            className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5"
+          />
         </CTAButton>
       </div>
     </motion.article>

@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Vincent.Detail",
+  name: "VINCENT.DETAIL",
   tagline: "Tundra Detailing",
   description:
     "Servicios de detailing automotriz en El Monte y alrededores: packs de lavado, limpieza interior, pulido y tratamientos cerámicos.",

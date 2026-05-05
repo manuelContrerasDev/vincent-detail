@@ -1,23 +1,39 @@
 "use client";
 
+import type { SVGProps } from "react";
 import { motion } from "motion/react";
 import { MessageCircle } from "lucide-react";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 import { siteConfig } from "@/content/site";
 import { CTAButton } from "@/components/ui/CTAButton";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { trackEvent } from "@/lib/tracking";
 
-function InstagramLogo(props: React.SVGProps<SVGSVGElement>) {
+function InstagramLogo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
-      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="4.2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
       <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
     </svg>
   );
 }
 
-function TikTokLogo(props: React.SVGProps<SVGSVGElement>) {
+function TikTokLogo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
       <path d="M15.8 3c.3 2 1.5 3.6 3.4 4.4v2.8c-1.4 0-2.7-.4-3.8-1.2v5.5a5.4 5.4 0 1 1-5.4-5.4c.4 0 .8 0 1.1.1v2.9a2.7 2.7 0 1 0 1.6 2.4V3h3.1Z" />
@@ -30,14 +46,28 @@ export function ContactSection() {
     "Hola, quiero más información sobre los servicios de Vincent.Detail."
   );
 
+  const [brandPrimary, brandSecondary = ""] = siteConfig.name.includes(".")
+    ? siteConfig.name.split(".")
+    : [siteConfig.name, ""];
+
   return (
     <section
       id="contacto"
-      className="relative overflow-hidden py-16 md:py-20 lg:py-24"
+      className="relative overflow-hidden border-t border-white/10 bg-[#050505] py-16 md:py-20 lg:py-24"
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,213,138,0.08),transparent_18%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.10),transparent_26%)]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(242,213,138,0.05),transparent_30%)]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.28),transparent)]"
       />
 
       <SectionContainer className="relative">
@@ -46,15 +76,35 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.45 }}
-          className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(135deg,rgba(242,213,138,0.08),rgba(255,255,255,0.02))] px-6 py-8 md:px-8 md:py-10 lg:px-10"
+          className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(135deg,rgba(242,213,138,0.08),rgba(255,255,255,0.02))] px-6 py-8 shadow-[0_18px_54px_rgba(0,0,0,0.34)] ring-1 ring-white/[0.03] md:px-8 md:py-10 lg:px-10"
         >
           <div className="mx-auto max-w-3xl text-center">
             <p className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.28em] text-[#D6B25E]">
               Contacto
             </p>
 
-            <h2 className="font-[family:var(--font-heading)] mt-3 text-3xl font-semibold leading-[1.02] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
-              Cotiza con {siteConfig.name}
+            <h2 className="mt-3 font-[family:var(--font-heading)] text-3xl font-semibold leading-[1.05] tracking-tight text-[#f7f3eb] md:text-4xl lg:text-5xl">
+              Cotiza con{" "}
+              <span
+                className="inline-flex items-baseline font-[family:var(--font-orbitron)] font-semibold tracking-[0.025em]"
+                aria-label={siteConfig.name}
+              >
+                <span className="bg-[linear-gradient(135deg,#FFFFFF_0%,#F7F3EB_48%,#D8D0C2_100%)] bg-clip-text text-transparent">
+                  {brandPrimary}
+                </span>
+
+                {brandSecondary ? (
+                  <>
+                    <span className="mx-[2px] bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_48%,#A97B1E_100%)] bg-clip-text text-[1.08em] text-transparent drop-shadow-[0_0_10px_rgba(214,178,94,0.35)]">
+                      .
+                    </span>
+
+                    <span className="bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_45%,#A97B1E_100%)] bg-clip-text text-transparent">
+                      {brandSecondary}
+                    </span>
+                  </>
+                ) : null}
+              </span>
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-white/72 md:text-base">
@@ -72,6 +122,8 @@ export function ContactSection() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                trackingLabel="Contacto - WhatsApp principal"
+                trackingSection="contact"
                 className="min-w-[220px]"
               >
                 <MessageCircle aria-hidden="true" className="mr-2 h-4 w-4" />
@@ -85,6 +137,13 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visitar Instagram de ${siteConfig.name}`}
+                onClick={() =>
+                  trackEvent("social_click", {
+                    label: "Instagram",
+                    section: "contact",
+                    href: siteConfig.instagramUrl,
+                  })
+                }
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
                 <InstagramLogo className="h-4 w-4 text-[#F2D58A]" />
@@ -101,6 +160,13 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visitar TikTok de ${siteConfig.name}`}
+                onClick={() =>
+                  trackEvent("social_click", {
+                    label: "TikTok",
+                    section: "contact",
+                    href: siteConfig.tiktokUrl,
+                  })
+                }
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
                 <TikTokLogo className="h-4 w-4 text-[#F2D58A]" />
@@ -117,9 +183,19 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Escribir por WhatsApp a ${siteConfig.name}`}
+                onClick={() =>
+                  trackEvent("whatsapp_click", {
+                    label: "Contacto - Link inferior WhatsApp",
+                    section: "contact",
+                    href: whatsappHref,
+                  })
+                }
                 className="font-[family:var(--font-rajdhani)] inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
               >
-                <MessageCircle aria-hidden="true" className="h-4 w-4 text-[#F2D58A]" />
+                <MessageCircle
+                  aria-hidden="true"
+                  className="h-4 w-4 text-[#F2D58A]"
+                />
                 WhatsApp
               </a>
             </div>

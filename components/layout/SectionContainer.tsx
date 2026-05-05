@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 type SectionContainerProps = {
   children: ReactNode;
   className?: string;
-  as?: "div" | "section" | "article" | "header" | "footer";
+  as?: "div" | "section" | "article" | "header" | "footer" | "nav";
 };
 
 export function SectionContainer({
@@ -15,7 +15,7 @@ export function SectionContainer({
   return (
     <Component
       className={cn(
-        "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 xl:px-10",
+        "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10",
         className
       )}
     >

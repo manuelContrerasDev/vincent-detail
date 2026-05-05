@@ -1,13 +1,46 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "motion/react";
-import { siteConfig } from "@/content/site";
+import {
+  motion,
+  useReducedMotion,
+  type Transition,
+  type Variants,
+} from "motion/react";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 import { CTAButton } from "@/components/ui/CTAButton";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
+const premiumEase = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const fadeUpVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
+
+const softTransition: Transition = {
+  duration: 0.52,
+  ease: premiumEase,
+};
+
 export function HeroSection() {
+  const shouldReduceMotion = useReducedMotion();
+
   const whatsappHref = getWhatsAppUrl(
     "Hola, quiero cotizar un servicio en Vincent.Detail."
   );
@@ -15,140 +48,128 @@ export function HeroSection() {
   return (
     <section
       id="inicio"
-      className="relative flex min-h-0 flex-1 overflow-hidden pt-[96px] md:pt-[104px]"
+      className="relative flex min-h-0 flex-1 overflow-hidden pt-[76px] sm:pt-[86px] md:pt-[104px]"
     >
-      <div className="absolute inset-0">
-        <Image
-          src="/gallery/resultado-07.jpeg"
-          alt="Vehículo con detailing automotriz realizado por Vincent.Detail"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.32)_0%,rgba(0,0,0,0.58)_22%,rgba(0,0,0,0.76)_54%,rgba(0,0,0,0.90)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,213,138,0.10),transparent_28%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-64 bg-[linear-gradient(180deg,rgba(0,0,0,0.86),rgba(0,0,0,0.38),rgba(0,0,0,0))] md:h-72"
-      />
-
-      <motion.div
-        aria-hidden="true"
-        initial={{ opacity: 0.35, scale: 1 }}
-        animate={{ opacity: 0.52, scale: 1.03 }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        }}
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,213,138,0.08),transparent_42%)]"
-      />
-
-      <SectionContainer className="relative flex flex-1 items-center">
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center py-10 text-center md:py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 18, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.55 }}
-            className="relative mb-5 h-[72px] w-[72px] overflow-hidden rounded-full border border-white/10 bg-black/20 shadow-2xl shadow-black/30 backdrop-blur-md md:mb-7 md:h-[88px] md:w-[88px]"
-          >
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10"
-            />
-            <Image
-              src="/images/logo/logo-vincent-detail-negro.png"
-              alt={siteConfig.name}
-              fill
-              priority
-              sizes="(max-width: 767px) 72px, 88px"
-              className="rounded-full object-cover"
-            />
-          </motion.div>
-
+      <SectionContainer className="relative flex min-h-0 flex-1 items-center">
+        <motion.div
+          variants={shouldReduceMotion ? undefined : containerVariants}
+          initial={shouldReduceMotion ? false : "hidden"}
+          animate={shouldReduceMotion ? undefined : "visible"}
+          className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-3 py-7 text-center sm:py-9 md:py-12 lg:py-14"
+        >
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.05 }}
-            className="font-[family:var(--font-rajdhani)] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#D6B25E] md:text-[12px] md:tracking-[0.30em]"
+            variants={shouldReduceMotion ? undefined : fadeUpVariants}
+            transition={softTransition}
+            className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.24em] text-[#D6B25E] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] sm:text-[11px] sm:tracking-[0.3em] md:text-[12px] md:tracking-[0.34em]"
           >
             Auto detailing premium
           </motion.p>
 
           <motion.h1
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="font-[family:var(--font-orbitron)] mt-4 text-[2rem] font-semibold uppercase leading-[0.98] tracking-[0.05em] text-[#f7f3eb] sm:text-[2.5rem] md:mt-5 md:text-[3.3rem] lg:text-[4rem]"
+            variants={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    hidden: { opacity: 0, y: 22, scale: 0.985 },
+                    visible: { opacity: 1, y: 0, scale: 1 },
+                  }
+            }
+            transition={{
+              duration: 0.62,
+              ease: premiumEase,
+            }}
+            className="mt-5 max-w-[355px] font-[family:var(--font-rajdhani)] text-[28px] font-semibold uppercase leading-[1.04] tracking-[0.08em] text-[#F3F1EC] drop-shadow-[0_5px_20px_rgba(0,0,0,0.92)] sm:max-w-[590px] sm:text-[36px] md:mt-6 md:max-w-3xl md:text-[46px] lg:text-[56px]"
           >
-            {siteConfig.name}
+            Brillo,
+            <motion.span
+              animate={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      textShadow: [
+                        "0 0 10px rgba(214,178,94,0.18)",
+                        "0 0 22px rgba(214,178,94,0.34)",
+                        "0 0 10px rgba(214,178,94,0.18)",
+                      ],
+                    }
+              }
+              transition={{
+                duration: 3.4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="mx-2 inline-block bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_48%,#A97B1E_100%)] bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(214,178,94,0.28)]"
+            >
+              protección
+            </motion.span>
+            y terminación
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="font-[family:var(--font-rajdhani)] mt-4 bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_42%,#A97B1E_100%)] bg-clip-text text-[14px] font-medium uppercase tracking-[0.12em] text-transparent md:mt-5 md:text-[17px] md:tracking-[0.16em]"
-          >
-            Corrección, protección y terminación
-          </motion.p>
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, scaleX: 1 }}
+            transition={{
+              duration: 0.72,
+              delay: 0.34,
+              ease: premiumEase,
+            }}
+            className="mt-5 h-px w-28 origin-center bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.95),transparent)] shadow-[0_0_18px_rgba(214,178,94,0.32)] sm:w-36 md:mt-6"
+          />
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.2 }}
-            className="mt-5 max-w-2xl text-[14px] leading-7 text-white/75 md:mt-7 md:text-[15px] md:leading-8"
+            variants={shouldReduceMotion ? undefined : fadeUpVariants}
+            transition={softTransition}
+            className="mt-8 max-w-[340px] px-2 text-[14px] leading-7 text-white/84 drop-shadow-[0_2px_12px_rgba(0,0,0,0.78)] sm:mt-9 sm:max-w-xl sm:text-[15px] sm:leading-8 md:max-w-2xl md:text-[16px]"
           >
-            Servicios de detailing automotriz enfocados en limpieza profunda,
-            brillo, corrección visual y una presentación cuidada para cada
-            vehículo.
+            Detailing exterior e interior para recuperar brillo, proteger la
+            pintura y elevar la presentación de tu vehículo
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.25 }}
-            className="mt-7 flex w-full max-w-xl flex-col gap-3 sm:mt-9 sm:flex-row sm:justify-center sm:gap-4"
+            variants={shouldReduceMotion ? undefined : fadeUpVariants}
+            transition={softTransition}
+            className="mt-8 grid w-full max-w-[320px] grid-cols-2 gap-2 px-2 sm:mt-9 sm:max-w-[400px] sm:gap-3 md:mt-10"
           >
-            <CTAButton
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-[family:var(--font-rajdhani)] sm:min-w-[220px]"
+            <motion.div
+              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+              className="min-w-0"
             >
-              Cotizar ahora
-            </CTAButton>
+              <CTAButton
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-[family:var(--font-rajdhani)] min-h-[42px] w-full px-3 py-2 text-[11px] tracking-[0.12em] sm:min-h-[44px] sm:text-[12px]"
+              >
+                Cotizar
+              </CTAButton>
+            </motion.div>
 
-            <CTAButton
-              href="#packs"
-              variant="secondary"
-              className="font-[family:var(--font-rajdhani)] border-white/20 bg-black/20 backdrop-blur-sm sm:min-w-[180px]"
+            <motion.div
+              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+              className="min-w-0"
             >
-              Ver packs
-            </CTAButton>
+              <CTAButton
+                href="#packs"
+                variant="secondary"
+                className="font-[family:var(--font-rajdhani)] min-h-[42px] w-full border-white/20 bg-black/25 px-3 py-2 text-[11px] tracking-[0.12em] backdrop-blur-sm sm:min-h-[44px] sm:text-[12px]"
+              >
+                Ver packs
+              </CTAButton>
+            </motion.div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.32 }}
-            className="mt-7 md:mt-9"
+            variants={shouldReduceMotion ? undefined : fadeUpVariants}
+            transition={softTransition}
+            className="mt-6 hidden sm:block md:mt-8"
           >
-            <p className="font-[family:var(--font-rajdhani)] text-[10px] font-medium uppercase tracking-[0.16em] text-[#D6B25E] md:text-[11px] md:tracking-[0.22em]">
-              Detailing · servicio profesional · atención personalizada
+            <p className="font-[family:var(--font-rajdhani)] text-[10px] font-medium uppercase tracking-[0.2em] text-[#D6B25E] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] md:text-[11px] md:tracking-[0.26em]">
+              Servicio profesional · atención personalizada
             </p>
           </motion.div>
-        </div>
+        </motion.div>
       </SectionContainer>
     </section>
   );

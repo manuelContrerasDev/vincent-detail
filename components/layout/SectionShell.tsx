@@ -8,6 +8,8 @@ type SectionShellProps = {
   className?: string;
   containerClassName?: string;
   ariaLabelledBy?: string;
+  withOverflowHidden?: boolean;
+  withDefaultBackground?: boolean;
 };
 
 export function SectionShell({
@@ -16,12 +18,19 @@ export function SectionShell({
   className,
   containerClassName,
   ariaLabelledBy,
+  withOverflowHidden = false,
+  withDefaultBackground = false,
 }: SectionShellProps) {
   return (
     <section
       id={id}
       aria-labelledby={ariaLabelledBy}
-      className={cn("py-16 md:py-20 lg:py-24", className)}
+      className={cn(
+        "relative py-16 sm:py-20 lg:py-24",
+        withOverflowHidden && "overflow-hidden",
+        withDefaultBackground && "border-y border-white/10 bg-[#050505]",
+        className
+      )}
     >
       <SectionContainer className={containerClassName}>
         {children}
