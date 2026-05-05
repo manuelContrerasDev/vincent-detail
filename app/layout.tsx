@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Poppins, Orbitron, Rajdhani } from "next/font/google";
 import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
 
 const headingFont = Poppins({
@@ -122,7 +124,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html
@@ -132,6 +134,7 @@ export default function RootLayout({
       <body className="bg-[#050505] font-[family:var(--font-body)] text-white antialiased">
         <LocalBusinessJsonLd />
         {children}
+        <GoogleAnalytics />
       </body>
     </html>
   );

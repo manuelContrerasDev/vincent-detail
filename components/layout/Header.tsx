@@ -94,13 +94,27 @@ export function Header() {
   }, [isOpen]);
 
   const handleBrandClick = () => {
-    trackEvent("contact_click", {
+    trackEvent("navigation_click", {
       label: "Header brand - Inicio",
       section: "header",
       href: "#inicio",
     });
 
     setIsOpen(false);
+  }
+
+  const handleMenuToggle = () => {
+    const nextIsOpen = !isOpen;
+
+  trackEvent("mobile_menu_click", {
+    label: nextIsOpen
+      ? "Header mobile - Abrir menú"
+      : "Header mobile - Cerrar menú",
+    section: "header_mobile",
+    href: "#mobile-navigation",
+  });
+
+  setIsOpen(nextIsOpen);
   };
 
   return (
@@ -231,7 +245,7 @@ export function Header() {
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
                   onClick={() =>
-                    trackEvent("contact_click", {
+                    trackEvent("navigation_click", {
                       label: `Header nav - ${item.label}`,
                       section: "header",
                       href: item.href,
@@ -282,7 +296,7 @@ export function Header() {
                   ? "border-white/10 bg-white/[0.04] hover:bg-white/[0.07]"
                   : "border-white/10 bg-black/10 hover:bg-white/[0.04]"
             )}
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={handleMenuToggle}
             aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"

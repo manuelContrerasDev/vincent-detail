@@ -166,6 +166,7 @@ export function HeroSection() {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  trackingEvent="hero_cta_click"
                   trackingLabel="Hero - Cotizar por WhatsApp"
                   trackingSection="hero"
                   className="min-h-[44px] w-full px-3 py-2 text-[11px] tracking-[0.10em] sm:min-h-[48px] sm:text-[12px]"

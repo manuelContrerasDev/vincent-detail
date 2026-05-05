@@ -165,6 +165,9 @@ export function PackVisualCard({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
+            trackingEvent="pack_click"
+            trackingLabel={`Pack - ${name}`}
+            trackingSection="packs"
             className="w-full px-3 py-2.5 text-[10px] tracking-[0.12em] sm:text-[11px] md:py-3 xl:text-[10px]"
           >
             Cotizar

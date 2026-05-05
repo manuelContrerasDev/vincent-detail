@@ -100,6 +100,7 @@ export function ServicesCatalogSection() {
                           target="_blank"
                           rel="noopener noreferrer"
                           variant="secondary"
+                          trackingEvent="service_click"
                           trackingLabel={`Servicio - ${service.title}`}
                           trackingSection="services"
                           className="group/button mx-auto min-h-[44px] w-full justify-between border-white/15 bg-white/[0.045] px-4 py-3 font-[family:var(--font-rajdhani)] text-[12px] uppercase tracking-[0.12em] backdrop-blur-sm transition duration-300 hover:border-[#D6B25E]/35 hover:bg-[#D6B25E]/10 sm:max-w-[260px] sm:text-[13px] md:mx-0"

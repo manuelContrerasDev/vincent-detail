@@ -90,6 +90,9 @@ export function QuoteBannerSection() {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  trackingEvent="contact_click"
+                  trackingLabel="Quote banner - Solicitar cotización"
+                  trackingSection="quote_banner"
                   className="w-full gap-2 px-5 py-3.5 text-[12px] sm:text-[13px] lg:min-w-[260px]"
                 >
                   <MessageCircle aria-hidden="true" className="h-4 w-4" />

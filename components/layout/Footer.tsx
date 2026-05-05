@@ -86,7 +86,7 @@ export function Footer() {
                     <a
                       href={item.href}
                       onClick={() =>
-                        trackEvent("contact_click", {
+                        trackEvent("navigation_click", {
                           label: `Footer nav - ${item.label}`,
                           section: "footer",
                           href: item.href,

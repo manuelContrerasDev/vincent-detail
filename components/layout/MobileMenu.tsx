@@ -70,7 +70,7 @@ export function MobileMenu({
                       }}
                       aria-current={isActive ? "page" : undefined}
                       onClick={() => {
-                        trackEvent("contact_click", {
+                        trackEvent("mobile_menu_click", {
                           label: `Mobile menu - ${item.label}`,
                           section: "mobile_menu",
                           href: item.href,

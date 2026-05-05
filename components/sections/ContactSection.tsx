@@ -156,6 +156,7 @@ export function ContactSection() {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  trackingEvent="contact_click"
                   trackingLabel="Contacto - WhatsApp principal"
                   trackingSection="contact"
                   className="w-full max-w-[320px] gap-2 px-4 py-3 text-[12px] sm:w-auto sm:min-w-[250px] sm:text-[13px]"

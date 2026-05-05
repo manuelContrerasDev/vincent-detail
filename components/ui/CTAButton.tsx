@@ -26,6 +26,19 @@ function isWhatsAppHref(href?: AnchorHTMLAttributes<HTMLAnchorElement>["href"]) 
   );
 }
 
+function resolveTrackingEvent(
+  href: AnchorHTMLAttributes<HTMLAnchorElement>["href"],
+  trackingEvent?: TrackingEvent
+): TrackingEvent | undefined {
+  if (trackingEvent) return trackingEvent;
+
+  if (isWhatsAppHref(href)) {
+    return "whatsapp_click";
+  }
+
+  return undefined;
+}
+
 export function CTAButton({
   children,
   className,
@@ -38,8 +51,7 @@ export function CTAButton({
   ...props
 }: CTAButtonProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    const eventName =
-      trackingEvent ?? (isWhatsAppHref(href) ? "whatsapp_click" : undefined);
+    const eventName = resolveTrackingEvent(href, trackingEvent);
 
     if (eventName) {
       trackEvent(eventName, {
