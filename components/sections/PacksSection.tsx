@@ -39,7 +39,8 @@ export function PacksSection() {
             <SectionHeading
               eyebrow="Packs"
               title="Detailing Packs"
-              description="Elige el nivel de cuidado ideal para tu vehículo: limpieza, brillo, corrección visual y protección."
+              description="Elige el nivel de cuidado ideal para tu vehículo: limpieza, brillo, corrección visual y protección"
+              align="center"
             />
           </div>
         </div>
@@ -50,11 +51,11 @@ export function PacksSection() {
         />
 
         <div className="mt-8 md:mt-10 lg:mt-12">
-          <ul className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:gap-5 xl:grid-cols-4 xl:gap-5">
+          <ul className="grid justify-items-center gap-4 sm:gap-5 md:grid-cols-2 lg:gap-5 xl:grid-cols-4 xl:gap-5">
             {packs.map((pack, index) => (
               <li
                 key={pack.slug}
-                className="mx-auto w-full max-w-[360px] md:max-w-none"
+                className="w-full max-w-[360px] md:max-w-none"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 18 }}

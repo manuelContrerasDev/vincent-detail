@@ -18,7 +18,7 @@ const navItems = [
 
 export function Footer() {
   const whatsappHref = getWhatsAppUrl(
-    "Hola, quiero más información sobre los servicios de Vincent.Detail."
+    "Hola, quiero más información sobre los servicios de Vincent.Detail"
   );
 
   return (

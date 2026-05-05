@@ -76,7 +76,7 @@ export function QuoteBannerSection() {
               <p className="mx-auto mt-4 max-w-2xl text-[14px] leading-7 text-white/72 sm:text-[15px] lg:mx-0">
                 Envíanos fotos del vehículo, tu zona y el servicio que tienes en
                 mente. Te orientamos para elegir la mejor opción según el estado
-                actual.
+                actual
               </p>
             </div>
 
