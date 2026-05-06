@@ -15,7 +15,7 @@ export const packs: PackItem[] = [
     slug: "bronce",
     image: "/images/packs/pack-bronce.jpeg",
     summary:
-      "Pulido abrillantado en 1 paso y protección sintética de hasta 6 meses",
+      "Incluye descontaminado exterior y una corrección ligera para mejorar brillo y terminación.",
     accent: "bronce",
     highlights: [
       "Encerado hidrofóbico",
@@ -29,7 +29,7 @@ export const packs: PackItem[] = [
     slug: "plata",
     image: "/images/packs/pack-plata.jpeg",
     summary:
-      "Incluye descontaminado exterior y una corrección ligera para mejorar brillo y terminación.",
+      "Pulido abrillantado en 1 paso y protección sintética de hasta 6 meses",
     accent: "plata",
     highlights: [
       "Descontaminado exterior",
