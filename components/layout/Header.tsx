@@ -38,13 +38,14 @@ function HeaderBrandLogo() {
     <picture className="block h-full w-full">
       <source
         media="(max-width: 639px)"
-        srcSet="/images/logo/logo-marca-mobile-transparent.png"
+        srcSet="/images/logo/logo-marca-mobile-transparent.webp"
       />
+
       <img
-        src="/images/logo/logo-marca-transparent.png"
+        src="/images/logo/logo-marca-transparent.webp"
         alt={siteConfig.name}
-        width={1799}
-        height={321}
+        width={640}
+        height={114}
         decoding="async"
         className="block h-full w-full object-contain object-center"
       />
