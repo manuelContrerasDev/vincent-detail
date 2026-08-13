@@ -15,7 +15,7 @@ export function SectionContainer({
   return (
     <Component
       className={cn(
-        "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10",
+        "mx-auto w-full max-w-[1280px] px-5 sm:px-7 lg:px-10 xl:px-12",
         className
       )}
     >

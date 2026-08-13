@@ -1,13 +1,16 @@
 "use client";
 
 import type { SVGProps } from "react";
-import { motion } from "motion/react";
-import { ArrowUpRight, MessageCircle, Send } from "lucide-react";
-import { SectionContainer } from "@/components/layout/SectionContainer";
-import { siteConfig } from "@/content/site";
+import { motion, useReducedMotion } from "motion/react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { SectionShell } from "@/components/layout/SectionShell";
 import { CTAButton } from "@/components/ui/CTAButton";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { siteConfig } from "@/content/site";
+import { premiumEase } from "@/lib/motion";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/tracking";
+import { cn } from "@/lib/utils";
 
 function InstagramLogo(props: SVGProps<SVGSVGElement>) {
   return (
@@ -21,14 +24,8 @@ function InstagramLogo(props: SVGProps<SVGSVGElement>) {
         stroke="currentColor"
         strokeWidth="1.8"
       />
-      <circle
-        cx="12"
-        cy="12"
-        r="4.2"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.4" cy="6.7" r="1" fill="currentColor" />
     </svg>
   );
 }
@@ -36,257 +33,185 @@ function InstagramLogo(props: SVGProps<SVGSVGElement>) {
 function TikTokLogo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M15.8 3c.3 2 1.5 3.6 3.4 4.4v2.8c-1.4 0-2.7-.4-3.8-1.2v5.5a5.4 5.4 0 1 1-5.4-5.4c.4 0 .8 0 1.1.1v2.9a2.7 2.7 0 1 0 1.6 2.4V3h3.1Z" />
+      <path d="M15.6 3c.3 1.9 1.4 3.3 3.4 4v3a8.3 8.3 0 0 1-3.4-1v6.2a5.8 5.8 0 1 1-5.8-5.8c.4 0 .8 0 1.2.1v3.1a2.7 2.7 0 1 0 1.6 2.6V3h3Z" />
     </svg>
   );
 }
 
-const socialLinks = [
-  {
-    label: "Instagram",
-    handle: siteConfig.instagram,
-    href: siteConfig.instagramUrl,
-    icon: InstagramLogo,
-    description: "Resultados y procesos",
-  },
-  {
-    label: "TikTok",
-    handle: siteConfig.tiktok,
-    href: siteConfig.tiktokUrl,
-    icon: TikTokLogo,
-    description: "Trabajos recientes",
-  },
-];
-
 export function ContactSection() {
+  const shouldReduceMotion = Boolean(useReducedMotion());
+
   const whatsappHref = getWhatsAppUrl(
-    "Hola, quiero más información sobre los servicios de Vincent.Detail."
+    "Hola, quiero cotizar un servicio con Vincent.Detail. Mi vehículo es [marca/modelo], estoy en [comuna] y puedo enviar fotos.",
   );
 
-  const [brandPrimary, brandSecondary = ""] = siteConfig.name.includes(".")
-    ? siteConfig.name.split(".")
-    : [siteConfig.name, ""];
+  const socialLinks = [
+    {
+      label: "Instagram",
+      handle: siteConfig.instagram,
+      description: "Resultados y procesos",
+      href: siteConfig.instagramUrl,
+      icon: InstagramLogo,
+    },
+    {
+      label: "TikTok",
+      handle: siteConfig.tiktok,
+      description: "Trabajos recientes",
+      href: siteConfig.tiktokUrl,
+      icon: TikTokLogo,
+    },
+  ] as const;
 
   return (
-    <section
+    <SectionShell
       id="contacto"
-      className="relative overflow-hidden border-t border-white/10 bg-[#050505] py-14 sm:py-16 md:py-20 lg:py-24"
+      ariaLabelledBy="contact-heading"
+      tone="deep"
+      ambient="center"
+      compact
+      topDivider
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.10),transparent_26%)]"
-      />
+      <motion.section
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.48, ease: premiumEase }}
+        className={cn(
+          "relative mx-auto w-full max-w-6xl overflow-hidden",
+          "rounded-[1.6rem] border border-white/[0.09]",
+          "bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.014)_38%,rgba(5,5,5,0.95)_100%)]",
+          "px-4 py-6 shadow-[0_24px_68px_rgba(0,0,0,0.32),0_0_28px_rgba(225,184,93,0.035)] backdrop-blur-2xl",
+          "sm:rounded-[1.8rem] sm:px-6 sm:py-7",
+          "md:px-7 md:py-8",
+          "lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(24rem,1.08fr)] lg:items-center lg:gap-9 lg:px-8 lg:py-8",
+          "xl:grid-cols-[minmax(0,0.86fr)_minmax(29rem,1.14fr)] xl:gap-11 xl:px-10",
+        )}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-highlight)]/38 to-transparent"
+        />
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(242,213,138,0.05),transparent_30%)]"
-      />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 -top-20 h-52 w-52 -translate-x-1/2 rounded-full bg-[var(--accent)]/[0.075] blur-[84px] lg:left-auto lg:right-[-5rem] lg:translate-x-0"
+        />
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.28),transparent)]"
-      />
+        <div className="relative mx-auto w-full max-w-2xl text-center lg:mx-0 lg:max-w-none lg:text-left">
+          <div id="contact-heading">
+            <SectionHeading
+              eyebrow="Contacto"
+              title="Síguenos en mis redes sociales"
+              description="Cotiza por WhatsApp o revisa nuestros últimos trabajos en redes."
+              className="items-center text-center sm:items-center sm:text-center lg:items-start lg:text-left"
+            />
+          </div>
 
-      <SectionContainer className="relative">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45 }}
-          className="mx-auto w-full max-w-5xl overflow-hidden rounded-[1.45rem] border border-white/10 bg-[#080808] shadow-[0_18px_54px_rgba(0,0,0,0.34)] ring-1 ring-white/[0.03] sm:rounded-[1.8rem]"
-        >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(242,213,138,0.09),rgba(255,255,255,0.025),rgba(0,0,0,0))]"
-          />
+          <CTAButton
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            trackingEvent="contact_click"
+            trackingLabel="Contacto - WhatsApp"
+            trackingSection="contact"
+            className="mx-auto mt-6 min-h-12 w-full max-w-md justify-between rounded-full px-5 text-[12px] tracking-[0.095em] sm:w-auto sm:min-w-[245px] sm:text-[13px] lg:mx-0"
+          >
+            <span className="inline-flex items-center gap-2.5">
+              <MessageCircle aria-hidden="true" className="h-4 w-4" />
+              Cotizar por WhatsApp
+            </span>
 
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-[#D6B25E]/10 blur-3xl"
-          />
+            <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+          </CTAButton>
+        </div>
 
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(242,213,138,0.36),transparent)]"
-          />
+        <div className="relative mx-auto mt-7 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-0 lg:max-w-none">
+          {socialLinks.map((item, index) => {
+            const Icon = item.icon;
 
-          <div className="relative z-10 px-4 py-7 text-center sm:px-6 sm:py-8 md:px-8 md:py-10 lg:px-10">
-            <div className="mx-auto flex w-full max-w-3xl flex-col items-center">
-              <p className="font-[family:var(--font-rajdhani)] text-[11px] font-bold uppercase tracking-[0.22em] text-[#D6B25E] sm:text-[12px] md:text-[13px]">
-                Contacto
-              </p>
-
-              <h2 className="mt-3 w-full max-w-[680px] font-[family:var(--font-heading)] text-[30px] font-bold uppercase leading-[1.02] tracking-[-0.035em] text-[#f7f3eb] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] min-[380px]:text-[34px] sm:text-[42px] md:text-[50px] lg:text-[56px]">
-                Cotiza con{" "}
-                <span
-                  className="mt-1 block font-[family:var(--font-orbitron)] font-semibold tracking-[0.025em] sm:mt-0 sm:inline"
-                  aria-label={siteConfig.name}
-                >
-                  <span className="bg-[linear-gradient(135deg,#FFFFFF_0%,#F7F3EB_48%,#D8D0C2_100%)] bg-clip-text text-transparent">
-                    {brandPrimary}
-                  </span>
-
-                  {brandSecondary ? (
-                    <>
-                      <span className="mx-[2px] bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_48%,#A97B1E_100%)] bg-clip-text text-[1.08em] text-transparent drop-shadow-[0_0_10px_rgba(214,178,94,0.35)]">
-                        .
-                      </span>
-
-                      <span className="bg-[linear-gradient(135deg,#F2D58A_0%,#D6B25E_45%,#A97B1E_100%)] bg-clip-text text-transparent">
-                        {brandSecondary}
-                      </span>
-                    </>
-                  ) : null}
-                </span>
-              </h2>
-
-              <p className="mt-4 w-full max-w-[620px] text-[15px] leading-7 text-white/72 sm:text-[16px] md:text-[17px] md:leading-8">
-                Escríbenos por WhatsApp para revisar tu vehículo, resolver dudas
-                y coordinar disponibilidad según tu zona.
-              </p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.35, delay: 0.1 }}
-                className="mt-7 flex w-full justify-center"
-              >
-                <CTAButton
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  trackingEvent="contact_click"
-                  trackingLabel="Contacto - WhatsApp principal"
-                  trackingSection="contact"
-                  className="w-full max-w-[320px] gap-2 px-4 py-3 text-[12px] sm:w-auto sm:min-w-[250px] sm:text-[13px]"
-                >
-                  <MessageCircle aria-hidden="true" className="h-4 w-4" />
-                  Escribir por WhatsApp
-                </CTAButton>
-              </motion.div>
-
-              <p className="mt-4 font-[family:var(--font-rajdhani)] text-[10px] font-medium uppercase tracking-[0.16em] text-white/45 sm:text-[11px] sm:tracking-[0.18em]">
-                Respuesta directa · Cotización personalizada
-              </p>
-            </div>
-
-            <div className="mx-auto mt-8 w-full max-w-3xl rounded-[1.35rem] border border-white/10 bg-black/32 p-3.5 shadow-[0_14px_38px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.03] backdrop-blur-sm sm:p-5">
-              <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#D6B25E]/20 bg-[#D6B25E]/10 shadow-[0_10px_28px_rgba(0,0,0,0.28)]">
-                  <Send aria-hidden="true" className="h-5 w-5 text-[#F2D58A]" />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="font-[family:var(--font-rajdhani)] text-[11px] font-bold uppercase tracking-[0.18em] text-[#D6B25E] sm:text-[12px]">
-                    Canales oficiales
-                  </p>
-
-                  <p className="mt-2 text-[14px] leading-6 text-white/62 sm:text-[15px]">
-                    Revisa resultados, procesos y trabajos recientes antes de
-                    cotizar.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 grid w-full gap-3 sm:grid-cols-2">
-                {socialLinks.map((item) => {
-                  const Icon = item.icon;
-
-                  return (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Visitar ${item.label} de ${siteConfig.name}`}
-                      onClick={() =>
-                        trackEvent("social_click", {
-                          label: item.label,
-                          section: "contact",
-                          href: item.href,
-                        })
-                      }
-                      className="group flex min-w-0 items-center justify-between gap-3 rounded-[1.15rem] border border-white/10 bg-black/28 px-3.5 py-3 text-left transition duration-300 hover:-translate-y-0.5 hover:border-[#D6B25E]/30 hover:bg-[#D6B25E]/10 sm:px-4 sm:py-3.5"
-                    >
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#D6B25E]/18 bg-[#D6B25E]/10">
-                          <Icon className="h-[18px] w-[18px] text-[#F2D58A]" />
-                        </div>
-
-                        <div className="min-w-0">
-                          <p className="font-[family:var(--font-rajdhani)] text-[13px] font-bold uppercase tracking-[0.12em] text-[#F7F3EB]">
-                            {item.label}
-                          </p>
-
-                          <p className="mt-0.5 truncate text-[12px] text-white/55 sm:text-[13px]">
-                            {item.handle} · {item.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <ArrowUpRight
-                        aria-hidden="true"
-                        className="h-4 w-4 shrink-0 text-[#D6B25E] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      />
-                    </a>
-                  );
-                })}
-              </div>
-
-              <a
-                href={whatsappHref}
+            return (
+              <motion.a
+                key={item.label}
+                href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Escribir por WhatsApp a ${siteConfig.name}`}
+                aria-label={`Visitar ${item.label} de ${siteConfig.name}`}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+                whileInView={
+                  shouldReduceMotion ? undefined : { opacity: 1, y: 0 }
+                }
+                viewport={{ once: true, amount: 0.24 }}
+                transition={{
+                  duration: 0.36,
+                  delay: shouldReduceMotion ? 0 : index * 0.05,
+                  ease: premiumEase,
+                }}
                 onClick={() =>
-                  trackEvent("whatsapp_click", {
-                    label: "Contacto - Link secundario WhatsApp",
+                  trackEvent("social_click", {
+                    label: item.label,
                     section: "contact",
-                    href: whatsappHref,
+                    href: item.href,
                   })
                 }
-                className="group mt-3 flex min-w-0 items-center justify-between gap-3 rounded-[1.15rem] border border-white/10 bg-black/28 px-3.5 py-3 text-left transition duration-300 hover:-translate-y-0.5 hover:border-[#D6B25E]/30 hover:bg-[#D6B25E]/10 sm:px-4 sm:py-3.5"
+                className={cn(
+                  "group/card relative overflow-hidden rounded-[1.15rem] border border-white/[0.085]",
+                  "bg-[linear-gradient(145deg,rgba(255,255,255,0.048),rgba(255,255,255,0.012)_42%,rgba(6,6,6,0.96)_100%)]",
+                  "px-4 py-4 shadow-[0_14px_36px_rgba(0,0,0,0.24)]",
+                  "transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[var(--ease-premium)]",
+                  "motion-safe:hover:-translate-y-0.5",
+                  "hover:border-[var(--accent-bright)]/28",
+                  "hover:bg-[linear-gradient(145deg,rgba(225,184,93,0.075),rgba(255,255,255,0.018)_42%,rgba(6,6,6,0.96)_100%)]",
+                  "hover:shadow-[0_20px_48px_rgba(0,0,0,0.30),0_0_20px_rgba(225,184,93,0.04)]",
+                  "sm:rounded-[1.25rem] sm:px-5 sm:py-5",
+                  "lg:min-h-[9rem]",
+                )}
               >
-                <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#D6B25E]/18 bg-[#D6B25E]/10">
-                    <MessageCircle
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/28 to-transparent"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/[0.025] blur-[48px] transition-colors duration-500 group-hover/card:bg-[var(--accent)]/[0.09]"
+                />
+
+                <div className="relative flex h-full items-center gap-3.5">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.025] text-[var(--accent-bright)] transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[var(--ease-premium)] group-hover/card:scale-[1.04] group-hover/card:border-[var(--accent-bright)]/30 group-hover/card:bg-[var(--accent)]/[0.08] group-hover/card:shadow-[0_0_20px_rgba(225,184,93,0.07)]">
+                    <Icon className="h-[18px] w-[18px]" />
+                  </span>
+
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="font-[family:var(--font-accent)] text-[10px] font-bold uppercase tracking-[0.13em] text-white/42 sm:text-[11px]">
+                      {item.label}
+                    </p>
+
+                    <p className="mt-1 truncate text-[15px] font-semibold leading-5 text-white/90 sm:text-[16px] lg:text-[17px]">
+                      {item.handle}
+                    </p>
+
+                    <p className="mt-1 truncate text-[12px] leading-4 text-white/42 sm:text-[13px]">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/34 transition-[transform,border-color,background-color,color] duration-300 ease-[var(--ease-premium)] group-hover/card:border-[var(--accent-bright)]/22 group-hover/card:bg-[var(--accent)]/[0.07] group-hover/card:text-[var(--accent-bright)]">
+                    <ArrowUpRight
                       aria-hidden="true"
-                      className="h-[18px] w-[18px] text-[#F2D58A]"
+                      className="h-4 w-4 transition-transform duration-300 ease-[var(--ease-premium)] group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
                     />
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="font-[family:var(--font-rajdhani)] text-[13px] font-bold uppercase tracking-[0.12em] text-[#F7F3EB]">
-                      WhatsApp
-                    </p>
-
-                    <p className="mt-0.5 truncate text-[12px] text-white/55 sm:text-[13px]">
-                      {siteConfig.whatsappDisplay} · Atención directa
-                    </p>
-                  </div>
+                  </span>
                 </div>
 
-                <ArrowUpRight
+                <div
                   aria-hidden="true"
-                  className="h-4 w-4 shrink-0 text-[#D6B25E] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-bright)]/52 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
                 />
-              </a>
-
-              <div className="mt-4 rounded-[1.1rem] border border-[#D6B25E]/14 bg-[#D6B25E]/8 p-3.5 text-center sm:text-left">
-                <p className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6B25E]">
-                  Recomendación
-                </p>
-
-                <p className="mt-1.5 text-[12px] leading-5 text-white/62 sm:text-[13px] sm:leading-6">
-                  Para una cotización más precisa, envía fotos del vehículo y
-                  comenta qué resultado buscas.
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </SectionContainer>
-    </section>
+              </motion.a>
+            );
+          })}
+        </div>
+      </motion.section>
+    </SectionShell>
   );
 }

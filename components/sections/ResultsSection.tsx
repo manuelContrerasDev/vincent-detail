@@ -1,417 +1,424 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { SectionContainer } from "@/components/layout/SectionContainer";
+import type { CSSProperties, RefObject } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { Pause, Play } from "lucide-react";
+import { SectionShell } from "@/components/layout/SectionShell";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { results } from "@/content/results";
+import { fadeUp, microTransition, softTransition } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
-const resultVideos = [
-  {
-    id: "gif-1",
-    title: "Brillo y terminación",
-    badge: "Abrillantado",
-    video: "/results/gif-01.mp4",
-  },
-  {
-    id: "gif-2",
-    title: "Tratamiento Cerámico 2 años",
-    badge: "Cerámico",
-    video: "/results/gif-02.mp4",
-  },
-  {
-    id: "gif-3",
-    title: "Lavado y limpieza",
-    badge: "Interior y exterior",
-    video: "/results/gif-03.mp4",
-  },
-  {
-    id: "gif-4",
-    title: "Lavado Premium Completo",
-    badge: "Lavado Full",
-    video: "/results/gif-04.mp4",
-  },
-  {
-    id: "gif-5",
-    title: "Tratamiento Cerámico 3 años",
-    badge: "Cerámico",
-    video: "/results/gif-05.mp4",
-  },
-  {
-    id: "gif-6",
-    title: "Lavado Premium Completo",
-    badge: "Lavado Full",
-    video: "/results/gif-06.mp4",
-  },
-];
+const MARQUEE_DURATION_SECONDS = 34;
+const CARD_GAP_PX = 14;
 
 type VideoRegistry = Record<string, HTMLVideoElement | null>;
+type ResultItem = (typeof results)[number];
+type ResultCardMode = "mobile" | "marquee";
+type ResultGroupName = "desktop-primary" | "desktop-duplicate";
 
-type VideoCardProps = {
-  id: string;
-  title: string;
-  badge: string;
-  video: string;
-  activeId: string | null;
-  setActiveId: (id: string | null) => void;
-  registerVideo: (id: string, node: HTMLVideoElement | null) => void;
-  pauseAllExcept: (id: string) => void;
+type ResultCardProps = ResultItem & {
+  instanceKey: string;
+  activeKey: string | null;
+  mode: ResultCardMode;
+  duplicate?: boolean;
+  registerVideo: (key: string, node: HTMLVideoElement | null) => void;
+  pauseAllExcept: (key: string) => void;
+  setActiveKey: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-function VideoCard({
-  id,
+type ResultGroupProps = {
+  group: ResultGroupName;
+  duplicate?: boolean;
+  activeKey: string | null;
+  registerVideo: (key: string, node: HTMLVideoElement | null) => void;
+  pauseAllExcept: (key: string) => void;
+  setActiveKey: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+function getCardWidth(viewportWidth: number) {
+  if (viewportWidth >= 1280) return (viewportWidth - CARD_GAP_PX * 3) / 4;
+  if (viewportWidth >= 768) return (viewportWidth - CARD_GAP_PX * 2) / 3;
+  return (viewportWidth - CARD_GAP_PX) / 2;
+}
+
+function useResponsiveCardWidth(viewportRef: RefObject<HTMLDivElement | null>) {
+  const [cardWidth, setCardWidth] = useState(300);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const updateCardWidth = () => {
+      if (viewport.clientWidth > 0) {
+        setCardWidth(getCardWidth(viewport.clientWidth));
+      }
+    };
+
+    updateCardWidth();
+    const observer = new ResizeObserver(updateCardWidth);
+    observer.observe(viewport);
+
+    return () => observer.disconnect();
+  }, [viewportRef]);
+
+  return cardWidth;
+}
+
+function ResultCard({
   title,
-  badge,
   video,
-  activeId,
-  setActiveId,
+  poster,
+  instanceKey,
+  activeKey,
+  mode,
+  duplicate = false,
   registerVideo,
   pauseAllExcept,
-}: VideoCardProps) {
+  setActiveKey,
+}: ResultCardProps) {
+  const shouldReduceMotion = Boolean(useReducedMotion());
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const isActive = activeKey === instanceKey;
 
-  const playVideo = async () => {
-    if (!videoRef.current) return;
+  const play = useCallback(async () => {
+    const node = videoRef.current;
+    if (!node) return;
+
+    pauseAllExcept(instanceKey);
+    setActiveKey(instanceKey);
 
     try {
-      await videoRef.current.play();
+      await node.play();
     } catch {
-      // El navegador puede bloquear reproducción automática.
+      setActiveKey((current) => (current === instanceKey ? null : current));
     }
-  };
+  }, [instanceKey, pauseAllExcept, setActiveKey]);
 
-  const pauseVideo = () => {
-    if (!videoRef.current) return;
+  const stop = useCallback(
+    (reset = true) => {
+      const node = videoRef.current;
+      if (!node) return;
+      node.pause();
+      if (reset) node.currentTime = 0;
+      setActiveKey((current) => (current === instanceKey ? null : current));
+    },
+    [instanceKey, setActiveKey],
+  );
 
-    videoRef.current.pause();
-    videoRef.current.currentTime = 0;
-  };
-
-  const handleMouseEnter = async () => {
-    pauseAllExcept(id);
-    setActiveId(id);
-    await playVideo();
-  };
-
-  const handleMouseLeave = () => {
-    pauseVideo();
-
-    if (activeId === id) {
-      setActiveId(null);
-    }
-  };
-
-  const handleToggle = async () => {
-    if (!videoRef.current) return;
-
-    if (activeId === id) {
-      pauseVideo();
-      setActiveId(null);
+  const toggle = useCallback(async () => {
+    if (isActive) {
+      stop(false);
       return;
     }
-
-    pauseAllExcept(id);
-    setActiveId(id);
-    await playVideo();
-  };
+    await play();
+  }, [isActive, play, stop]);
 
   return (
-    <article
-      role="button"
-      tabIndex={0}
-      aria-pressed={activeId === id}
-      aria-label={`${title}, ${badge}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleToggle}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          void handleToggle();
-        }
-      }}
-      className="group relative h-full cursor-pointer overflow-hidden rounded-[1.15rem] border border-white/10 bg-[#080808] shadow-[0_14px_36px_rgba(0,0,0,0.32)] outline-none ring-1 ring-white/[0.03] transition duration-300 hover:-translate-y-1 hover:border-[#D6B25E]/35 hover:shadow-[0_22px_58px_rgba(0,0,0,0.48)] focus-visible:ring-2 focus-visible:ring-[#F2D58A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] sm:rounded-[1.35rem]"
+    <li
+      className={cn(
+        "shrink-0 snap-start",
+        mode === "mobile" ? "w-[84vw] max-w-[370px]" : "result-marquee-card",
+      )}
     >
-      <div className="relative aspect-[9/13] overflow-hidden bg-black sm:aspect-[9/12] md:aspect-[4/5] lg:aspect-[9/12]">
+      <motion.button
+        type="button"
+        tabIndex={duplicate ? -1 : 0}
+        aria-hidden={duplicate || undefined}
+        aria-pressed={duplicate ? undefined : isActive}
+        aria-label={
+          duplicate
+            ? undefined
+            : `${isActive ? "Pausar" : "Reproducir"} resultado: ${title}`
+        }
+        onClick={() => void toggle()}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.992 }}
+        transition={microTransition}
+        className={cn(
+          "group relative block aspect-[4/3] w-full overflow-hidden rounded-[1.4rem]",
+          "border border-white/[0.07] bg-[#060606] text-left",
+          "shadow-[0_20px_52px_rgba(0,0,0,0.32)]",
+          "transition-[transform,box-shadow,filter,border-color] duration-500 ease-[var(--ease-premium)]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-bright)]",
+          "focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]",
+          "sm:aspect-[5/6] sm:rounded-[1.55rem]",
+          "sm:motion-safe:hover:-translate-y-1 sm:motion-safe:hover:scale-[1.008]",
+          "sm:hover:border-[var(--accent-bright)]/24",
+          isActive &&
+            "border-[var(--accent-bright)]/34 shadow-[0_28px_76px_rgba(0,0,0,0.38),0_0_30px_rgba(225,184,93,0.10)]",
+        )}
+      >
         <video
           ref={(node) => {
             videoRef.current = node;
-            registerVideo(id, node);
+            registerVideo(instanceKey, node);
           }}
           src={video}
+          poster={poster}
           muted
           loop
           playsInline
-          preload="metadata"
+          preload={duplicate ? "none" : "metadata"}
           aria-hidden="true"
-          className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.04]"
+          onPlay={() => setActiveKey(instanceKey)}
+          onPause={() =>
+            setActiveKey((current) =>
+              current === instanceKey ? null : current,
+            )
+          }
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover object-center",
+            "transition-[transform,opacity,filter] duration-700 ease-[var(--ease-premium)]",
+            isActive
+              ? "scale-100 opacity-100 saturate-100"
+              : "scale-100 opacity-[0.93] saturate-[0.88] sm:group-hover:scale-[1.025] sm:group-hover:opacity-100 sm:group-hover:saturate-100",
+          )}
         />
 
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.16)_46%,rgba(0,0,0,0.82)_100%)]"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,transparent_42%,rgba(0,0,0,0.15)_66%,rgba(0,0,0,0.90)_100%)]"
         />
 
-        <div
+        <span
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(242,213,138,0.12),transparent_30%)] opacity-80 transition duration-300 group-hover:opacity-100"
-        />
+          className={cn(
+            "absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full",
+            "border border-white/[0.10] bg-black/42 text-white/84 backdrop-blur-xl",
+            "transition-[background-color,border-color,color,transform,box-shadow] duration-300 ease-[var(--ease-premium)]",
+            "sm:right-3.5 sm:top-3.5",
+            isActive
+              ? "border-[var(--accent-bright)]/36 bg-[var(--accent)]/18 text-[var(--accent-highlight)] shadow-[0_0_22px_rgba(225,184,93,0.10)]"
+              : "sm:group-hover:-translate-y-px sm:group-hover:border-[var(--accent-bright)]/24 sm:group-hover:bg-black/56 sm:group-hover:text-[var(--accent-bright)]",
+          )}
+        >
+          {isActive ? (
+            <Pause className="h-3.5 w-3.5" fill="currentColor" />
+          ) : (
+            <Play className="ml-0.5 h-3.5 w-3.5" fill="currentColor" />
+          )}
+        </span>
 
-        <div className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 md:left-4 md:top-4">
-          <span className="font-[family:var(--font-rajdhani)] inline-flex rounded-full border border-[#F2D58A]/22 bg-black/35 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-[#D6B25E] backdrop-blur-sm sm:text-[9px] md:px-3 md:text-[10px]">
-            {badge}
-          </span>
+        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+          <div className="flex items-end justify-between gap-3">
+            <h3 className="line-clamp-2 max-w-[18ch] font-[family:var(--font-heading)] text-[1.05rem] font-semibold leading-[1.05] tracking-[-0.035em] text-white drop-shadow-[0_3px_14px_rgba(0,0,0,0.84)] sm:text-[1.18rem] md:text-[1.22rem] xl:text-[1.3rem]">
+              {title}
+            </h3>
+
+            <span className="hidden shrink-0 font-[family:var(--font-accent)] text-[9px] font-semibold uppercase tracking-[0.12em] text-white/38 transition-colors duration-300 sm:block sm:group-hover:text-[var(--accent-bright)]/70">
+              {isActive ? "Reproduciendo" : "Ver"}
+            </span>
+          </div>
         </div>
+      </motion.button>
+    </li>
+  );
+}
 
-        <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
-          <h3 className="font-[family:var(--font-rajdhani)] text-[12px] font-bold uppercase leading-tight tracking-[0.04em] text-[#F7F3EB] drop-shadow-[0_4px_16px_rgba(0,0,0,0.78)] sm:text-[14px] md:text-[15px]">
-            {title}
-          </h3>
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/0 transition duration-300 group-hover:ring-[#F2D58A]/20"
+function DesktopResultGroup({
+  group,
+  duplicate = false,
+  activeKey,
+  registerVideo,
+  pauseAllExcept,
+  setActiveKey,
+}: ResultGroupProps) {
+  return (
+    <ul
+      className="flex shrink-0 gap-[14px] pr-[14px]"
+      aria-hidden={duplicate || undefined}
+    >
+      {results.map((item) => (
+        <ResultCard
+          key={`${group}-${item.id}`}
+          {...item}
+          mode="marquee"
+          instanceKey={`${group}-${item.id}`}
+          activeKey={activeKey}
+          duplicate={duplicate}
+          registerVideo={registerVideo}
+          pauseAllExcept={pauseAllExcept}
+          setActiveKey={setActiveKey}
         />
-      </div>
-    </article>
+      ))}
+    </ul>
   );
 }
 
 export function ResultsSection() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const shouldReduceMotion = Boolean(useReducedMotion());
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
+  const desktopViewportRef = useRef<HTMLDivElement | null>(null);
   const videoMapRef = useRef<VideoRegistry>({});
-  const carouselRef = useRef<HTMLUListElement | null>(null);
-  const itemRefs = useRef<Array<HTMLLIElement | null>>([]);
-  const scrollFrameRef = useRef<number | null>(null);
+  const cardWidth = useResponsiveCardWidth(desktopViewportRef);
+
+  const registerVideo = useCallback(
+    (key: string, node: HTMLVideoElement | null) => {
+      if (node) videoMapRef.current[key] = node;
+      else delete videoMapRef.current[key];
+    },
+    [],
+  );
+
+  const pauseAllExcept = useCallback((currentKey: string) => {
+    Object.entries(videoMapRef.current).forEach(([key, node]) => {
+      if (!node || key === currentKey) return;
+      node.pause();
+      node.currentTime = 0;
+    });
+  }, []);
+
+  const pauseAllVideos = useCallback(() => {
+    Object.values(videoMapRef.current).forEach((node) => {
+      if (!node) return;
+      node.pause();
+      node.currentTime = 0;
+    });
+    setActiveKey(null);
+  }, []);
 
   useEffect(() => {
+    const videoRegistry = videoMapRef.current;
     return () => {
-      if (scrollFrameRef.current !== null) {
-        window.cancelAnimationFrame(scrollFrameRef.current);
-      }
+      Object.values(videoRegistry).forEach((node) => node?.pause());
     };
   }, []);
 
-  const registerVideo = (id: string, node: HTMLVideoElement | null) => {
-    videoMapRef.current[id] = node;
-  };
-
-  const pauseAllExcept = (currentId: string) => {
-    Object.entries(videoMapRef.current).forEach(([id, node]) => {
-      if (!node || id === currentId) return;
-
-      node.pause();
-      node.currentTime = 0;
-    });
-  };
-
-  const pauseAllVideos = () => {
-    Object.values(videoMapRef.current).forEach((node) => {
-      if (!node) return;
-
-      node.pause();
-      node.currentTime = 0;
-    });
-
-    setActiveId(null);
-  };
-
-  const updateCurrentIndexFromScroll = () => {
-    const carousel = carouselRef.current;
-
-    if (!carousel) return;
-
-    const items = itemRefs.current.filter(Boolean) as HTMLLIElement[];
-
-    if (!items.length) return;
-
-    const carouselLeft = carousel.getBoundingClientRect().left;
-
-    let closestIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
-
-    items.forEach((item, index) => {
-      const itemLeft = item.getBoundingClientRect().left;
-      const distance = Math.abs(itemLeft - carouselLeft);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    setCurrentIndex(closestIndex);
-  };
-
-  const handleNativeScroll = () => {
-    if (scrollFrameRef.current !== null) return;
-
-    scrollFrameRef.current = window.requestAnimationFrame(() => {
-      scrollFrameRef.current = null;
-      updateCurrentIndexFromScroll();
-    });
-  };
-
-  const scrollToIndex = (index: number) => {
-    const carousel = carouselRef.current;
-    const target = itemRefs.current[index];
-
-    if (!carousel || !target) return;
-
-    pauseAllVideos();
-    setCurrentIndex(index);
-
-    carousel.scrollTo({
-      left: target.offsetLeft - carousel.offsetLeft,
-      behavior: "smooth",
-    });
-  };
-
-  const goToPrevious = () => {
-    const previousIndex =
-      currentIndex === 0 ? resultVideos.length - 1 : currentIndex - 1;
-
-    scrollToIndex(previousIndex);
-  };
-
-  const goToNext = () => {
-    const nextIndex =
-      currentIndex === resultVideos.length - 1 ? 0 : currentIndex + 1;
-
-    scrollToIndex(nextIndex);
-  };
+  const marqueePaused = shouldReduceMotion || activeKey !== null;
 
   return (
-    <section
+    <SectionShell
       id="resultados"
-      aria-labelledby="results-heading"
-      className="relative overflow-hidden bg-[#050505] py-16 sm:py-20 lg:py-24"
+      ariaLabelledBy="results-heading"
+      tone="soft"
+      ambient="left"
+      compact
+      topDivider
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.10),transparent_26%)]"
-      />
+      <motion.div
+        variants={shouldReduceMotion ? undefined : fadeUp}
+        initial={shouldReduceMotion ? false : "hidden"}
+        whileInView={shouldReduceMotion ? undefined : "visible"}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={softTransition}
+        className="mb-6 sm:mb-8 lg:mb-10"
+      >
+        <div id="results-heading">
+          <SectionHeading
+            eyebrow="Resultados"
+            title="El acabado habla por sí solo"
+          />
+        </div>
+      </motion.div>
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(242,213,138,0.05),transparent_30%)]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.28),transparent)]"
-      />
-
-      <SectionContainer className="relative">
-        <div id="results-heading" className="max-w-3xl">
-          <SectionHeading eyebrow="Resultados" title="Galería y resultados" />
+      <motion.div
+        variants={shouldReduceMotion ? undefined : fadeUp}
+        initial={shouldReduceMotion ? false : "hidden"}
+        whileInView={shouldReduceMotion ? undefined : "visible"}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={softTransition}
+        className="relative"
+      >
+        <div
+          onPointerDown={(event) => {
+            if (event.pointerType === "touch") pauseAllVideos();
+          }}
+          className={cn(
+            "relative -mr-5 overflow-x-auto overscroll-x-contain pr-5 sm:hidden",
+            "snap-x snap-mandatory scroll-smooth touch-pan-x",
+            "[-webkit-overflow-scrolling:touch]",
+            "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          )}
+        >
+          <ul className="flex w-max gap-3.5 pr-[16vw]">
+            {results.map((item) => (
+              <ResultCard
+                key={`mobile-${item.id}`}
+                {...item}
+                mode="mobile"
+                instanceKey={`mobile-${item.id}`}
+                activeKey={activeKey}
+                registerVideo={registerVideo}
+                pauseAllExcept={pauseAllExcept}
+                setActiveKey={setActiveKey}
+              />
+            ))}
+          </ul>
         </div>
 
         <div
-          aria-hidden="true"
-          className="mt-8 h-px w-full max-w-4xl bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.26),rgba(255,255,255,0.10),transparent)]"
-        />
+          ref={desktopViewportRef}
+          className="relative hidden overflow-hidden sm:block"
+          style={{ "--result-card-width": `${cardWidth}px` } as CSSProperties}
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-12 bg-gradient-to-r from-[var(--page-soft)] via-[var(--page-soft)]/72 to-transparent lg:w-16"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 z-20 w-12 bg-gradient-to-l from-[var(--page-soft)] via-[var(--page-soft)]/72 to-transparent lg:w-16"
+          />
 
-        <div className="relative mt-8 md:mt-10">
-          <div className="relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-black/25 shadow-[0_18px_54px_rgba(0,0,0,0.34)] ring-1 ring-white/[0.03] sm:rounded-[1.6rem]">
-            <button
-              type="button"
-              onClick={goToPrevious}
-              className="group/rail absolute inset-y-3 left-0 z-30 flex w-10 touch-manipulation items-center justify-center overflow-hidden rounded-r-2xl border-r border-white/10 bg-black/20 text-white/75 backdrop-blur-[2px] transition duration-300 hover:border-[#D6B25E]/35 hover:bg-black/35 hover:text-[#F2D58A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D58A] sm:inset-y-4 sm:w-12 md:w-14"
-              aria-label="Ver resultado anterior"
-            >
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.42),rgba(5,5,5,0.10),rgba(5,5,5,0))] opacity-80 transition duration-300 group-hover/rail:opacity-100"
+          <div
+            className="results-marquee-track flex w-max"
+            style={{
+              animation: marqueePaused
+                ? "none"
+                : `results-marquee ${MARQUEE_DURATION_SECONDS}s linear infinite`,
+            }}
+          >
+            <DesktopResultGroup
+              group="desktop-primary"
+              activeKey={activeKey}
+              registerVideo={registerVideo}
+              pauseAllExcept={pauseAllExcept}
+              setActiveKey={setActiveKey}
+            />
+
+            {!shouldReduceMotion ? (
+              <DesktopResultGroup
+                group="desktop-duplicate"
+                duplicate
+                activeKey={activeKey}
+                registerVideo={registerVideo}
+                pauseAllExcept={pauseAllExcept}
+                setActiveKey={setActiveKey}
               />
-
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute left-0 top-1/2 h-16 w-px -translate-y-1/2 bg-[linear-gradient(180deg,transparent,#D6B25E,transparent)] opacity-60 transition duration-300 group-hover/rail:opacity-100"
-              />
-
-              <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/25 ring-1 ring-white/[0.03] transition duration-300 group-hover/rail:border-[#D6B25E]/40 group-hover/rail:bg-[#D6B25E]/10 sm:h-10 sm:w-10">
-                <ChevronLeft aria-hidden="true" className="h-5 w-5" />
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={goToNext}
-              className="group/rail absolute inset-y-3 right-0 z-30 flex w-10 touch-manipulation items-center justify-center overflow-hidden rounded-l-2xl border-l border-white/10 bg-black/20 text-white/75 backdrop-blur-[2px] transition duration-300 hover:border-[#D6B25E]/35 hover:bg-black/35 hover:text-[#F2D58A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2D58A] sm:inset-y-4 sm:w-12 md:w-14"
-              aria-label="Ver siguiente resultado"
-            >
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(270deg,rgba(5,5,5,0.42),rgba(5,5,5,0.10),rgba(5,5,5,0))] opacity-80 transition duration-300 group-hover/rail:opacity-100"
-              />
-
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute right-0 top-1/2 h-16 w-px -translate-y-1/2 bg-[linear-gradient(180deg,transparent,#D6B25E,transparent)] opacity-60 transition duration-300 group-hover/rail:opacity-100"
-              />
-
-              <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/25 ring-1 ring-white/[0.03] transition duration-300 group-hover/rail:border-[#D6B25E]/40 group-hover/rail:bg-[#D6B25E]/10 sm:h-10 sm:w-10">
-                <ChevronRight aria-hidden="true" className="h-5 w-5" />
-              </span>
-            </button>
-
-            <ul
-              ref={carouselRef}
-              onScroll={handleNativeScroll}
-              className="flex snap-x snap-proximity gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-3 py-3 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:gap-4 sm:px-4 sm:py-4 [&::-webkit-scrollbar]:hidden"
-            >
-              {resultVideos.map((item, index) => (
-                <li
-                  key={item.id}
-                  ref={(node) => {
-                    itemRefs.current[index] = node;
-                  }}
-                  className="min-w-0 shrink-0 basis-[calc((100%_-_0.75rem)/2)] snap-start md:basis-[calc((100%_-_2rem)/3)] lg:basis-[calc((100%_-_3rem)/4)]"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.45, delay: index * 0.05 }}
-                    className="h-full"
-                  >
-                    <VideoCard
-                      id={item.id}
-                      title={item.title}
-                      badge={item.badge}
-                      video={item.video}
-                      activeId={activeId}
-                      setActiveId={setActiveId}
-                      registerVideo={registerVideo}
-                      pauseAllExcept={pauseAllExcept}
-                    />
-                  </motion.div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-4 flex items-center justify-center gap-1.5">
-            {resultVideos.map((item, index) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => scrollToIndex(index)}
-                aria-label={`Ir al resultado ${index + 1}`}
-                className={
-                  currentIndex === index
-                    ? "h-1.5 w-5 rounded-full bg-[#D6B25E] transition-all duration-300"
-                    : "h-1.5 w-1.5 rounded-full bg-white/25 transition-all duration-300 hover:bg-[#D6B25E]/60"
-                }
-              />
-            ))}
+            ) : null}
           </div>
         </div>
-      </SectionContainer>
-    </section>
+      </motion.div>
+
+      <style jsx global>{`
+        .results-marquee-track {
+          will-change: transform;
+        }
+
+        .result-marquee-card {
+          width: var(--result-card-width);
+        }
+
+        @keyframes results-marquee {
+          from {
+            transform: translate3d(0, 0, 0);
+          }
+
+          to {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .results-marquee-track {
+            animation: none !important;
+            transform: none !important;
+            will-change: auto;
+          }
+        }
+      `}</style>
+    </SectionShell>
   );
 }

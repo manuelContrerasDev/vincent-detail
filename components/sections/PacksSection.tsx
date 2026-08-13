@@ -1,82 +1,120 @@
 "use client";
 
-import { motion } from "motion/react";
-import { SectionContainer } from "@/components/layout/SectionContainer";
+import { motion, useReducedMotion } from "motion/react";
+import { SectionShell } from "@/components/layout/SectionShell";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PackVisualCard } from "@/components/ui/PackVisualCard";
+import { CarouselEdgeControls } from "@/components/ui/CarouselEdgeControls";
 import { packs } from "@/content/packs";
+import { useHorizontalCarousel } from "@/hooks/useHorizontalCarousel";
+import { staggerContainer } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 export function PacksSection() {
+  const shouldReduceMotion = Boolean(useReducedMotion());
+
+  const { carouselRef, canScrollLeft, canScrollRight, scrollByPage } =
+    useHorizontalCarousel<HTMLUListElement>();
+
   return (
-    <section
+    <SectionShell
       id="packs"
-      aria-labelledby="packs-heading"
-      className="relative overflow-hidden bg-[#050505] py-16 sm:py-18 md:py-22 lg:py-24"
+      ariaLabelledBy="packs-heading"
+      tone="deep"
+      ambient="center"
+      compact
+      topDivider
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.10),transparent_26%)]"
-      />
+      <div id="packs-heading">
+        <SectionHeading
+          eyebrow="Detailing Packs"
+          title="Niveles de Protección y Corrección"
+          description="Distintos niveles de limpieza, corrección y protección"
+        />
+      </div>
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(242,213,138,0.05),transparent_28%)]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.28),transparent)]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0))]"
-      />
-
-      <SectionContainer className="relative">
-        <div className="mx-auto max-w-3xl text-center">
-          <div id="packs-heading">
-            <SectionHeading
-              eyebrow="Packs"
-              title="Detailing Packs"
-              description="Elige el nivel de cuidado ideal para tu vehículo: limpieza, brillo, corrección visual y protección"
-              align="center"
-            />
-          </div>
-        </div>
-
+      <div className="relative mt-7 sm:mt-8 md:mt-10 lg:mt-12">
         <div
           aria-hidden="true"
-          className="mx-auto mt-7 h-px w-full max-w-4xl bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),rgba(214,178,94,0.26),rgba(255,255,255,0.10),transparent)] md:mt-8"
+          className="pointer-events-none absolute -inset-x-[4%] top-[8%] h-[68%] rounded-[3rem] bg-[radial-gradient(ellipse_at_center,rgba(225,184,93,0.045),transparent_68%)] blur-[34px]"
         />
 
-        <div className="mt-8 md:mt-10 lg:mt-12">
-          <ul className="grid justify-items-center gap-4 sm:gap-5 md:grid-cols-2 lg:gap-5 xl:grid-cols-4 xl:gap-5">
+        {/* Mobile / small tablet: carrusel horizontal nativo */}
+        <div className="relative md:hidden">
+          <motion.ul
+            ref={carouselRef}
+            aria-label="Packs de detailing disponibles"
+            variants={shouldReduceMotion ? undefined : staggerContainer}
+            initial={shouldReduceMotion ? false : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "visible"}
+            viewport={{ once: true, amount: 0.12 }}
+            className={cn(
+              "relative flex gap-3.5 overflow-x-auto overscroll-x-contain scroll-smooth",
+              "snap-x snap-mandatory touch-pan-x",
+              "pb-3 pr-5 -mr-5",
+              "[-webkit-overflow-scrolling:touch]",
+              "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "sm:gap-4 sm:pr-6 sm:-mr-6",
+            )}
+          >
             {packs.map((pack, index) => (
               <li
-                key={pack.slug}
-                className="w-full max-w-[360px] md:max-w-none"
+                key={`mobile-${pack.slug}`}
+                className={cn(
+                  "h-full min-w-0 shrink-0 snap-start",
+                  "basis-[86%]",
+                  "sm:basis-[64%]",
+                )}
               >
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.18 }}
-                  transition={{ duration: 0.45, delay: index * 0.05 }}
-                  className="h-full"
-                >
-                  <PackVisualCard
-                    name={pack.name}
-                    image={pack.image}
-                    summary={pack.summary}
-                    accent={pack.accent}
-                    highlights={pack.highlights}
-                  />
-                </motion.div>
+                <PackVisualCard
+                  name={pack.name}
+                  image={pack.image}
+                  summary={pack.summary}
+                  accent={pack.accent}
+                  highlights={pack.highlights}
+                  index={index + 1}
+                />
               </li>
             ))}
-          </ul>
+          </motion.ul>
+
+          <CarouselEdgeControls
+            canScrollLeft={canScrollLeft}
+            canScrollRight={canScrollRight}
+            onPrevious={() => scrollByPage(-1)}
+            onNext={() => scrollByPage(1)}
+          />
         </div>
-      </SectionContainer>
-    </section>
+
+        {/* Tablet grande / desktop: grid estable */}
+        <motion.ul
+          aria-label="Packs de detailing disponibles"
+          variants={shouldReduceMotion ? undefined : staggerContainer}
+          initial={shouldReduceMotion ? false : "hidden"}
+          whileInView={shouldReduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.12 }}
+          className={cn(
+            "relative hidden",
+            "md:grid md:grid-cols-2 md:gap-5",
+            "lg:gap-6",
+            "xl:grid-cols-4 xl:gap-5",
+            "2xl:gap-6",
+          )}
+        >
+          {packs.map((pack, index) => (
+            <li key={`desktop-${pack.slug}`} className="h-full min-w-0">
+              <PackVisualCard
+                name={pack.name}
+                image={pack.image}
+                summary={pack.summary}
+                accent={pack.accent}
+                highlights={pack.highlights}
+                index={index + 1}
+              />
+            </li>
+          ))}
+        </motion.ul>
+      </div>
+    </SectionShell>
   );
 }

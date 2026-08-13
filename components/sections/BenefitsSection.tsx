@@ -1,160 +1,178 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { BadgeCheck, ExternalLink } from "lucide-react";
 import { SectionContainer } from "@/components/layout/SectionContainer";
 import { siteConfig } from "@/content/site";
-
-const premiumEase = [0.22, 1, 0.36, 1] as [number, number, number, number];
+import { microTransition, premiumEase } from "@/lib/motion";
+import { trackEvent } from "@/lib/tracking";
+import { cn } from "@/lib/utils";
 
 const benefits = [
-  "Brillo profundo",
-  "Corrección visual",
-  "Protección duradera",
+  "Packs de detailing",
+  "Corrección de pintura",
+  "Protección cerámica",
+  "Interior y exterior",
+  "Servicio a domicilio",
   "Atención personalizada",
-  "Terminación premium",
-  "Cuidado exterior e interior",
-];
+] as const;
 
 const marqueeItems = [...benefits, ...benefits];
 
 export function BenefitsSection() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = Boolean(useReducedMotion());
+
+  const certificationUrl =
+    "https://www.instagram.com/3dcarcare?igsh=ajRwd2lvbHFpeHV3";
 
   return (
     <motion.section
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.42, ease: premiumEase }}
-      className="relative shrink-0 overflow-hidden border-y border-white/8"
-      aria-label={`Certificaciones y beneficios de ${siteConfig.name}`}
+      initial={
+        shouldReduceMotion
+          ? false
+          : {
+              opacity: 0,
+              y: 8,
+            }
+      }
+      animate={
+        shouldReduceMotion
+          ? undefined
+          : {
+              opacity: 1,
+              y: 0,
+            }
+      }
+      transition={{
+        duration: 0.52,
+        delay: 0.22,
+        ease: premiumEase,
+      }}
+      className={cn(
+        "relative shrink-0 overflow-hidden",
+        "border-t border-white/[0.09]",
+        "bg-[linear-gradient(180deg,rgba(9,9,8,0.78),rgba(5,5,5,0.94))]",
+        "shadow-[0_-18px_52px_rgba(0,0,0,0.18)]",
+        "backdrop-blur-[14px] backdrop-saturate-[1.08]",
+      )}
+      aria-label={`Certificación y especialidades de ${siteConfig.name}`}
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.07),transparent_24%)]"
+        className="pointer-events-none absolute inset-x-[8%] top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-bright)]/42 to-transparent"
       />
 
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.22),transparent)]"
+        className="pointer-events-none absolute left-1/2 top-0 h-16 w-[70%] max-w-3xl -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(225,184,93,0.075),transparent_68%)] blur-2xl"
       />
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,178,94,0.14),transparent)]"
-      />
-
-      <SectionContainer className="relative py-2 sm:py-3 md:py-4">
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.42, ease: premiumEase }}
-          className="flex flex-col items-center text-center"
-        >
-          <p className="mb-2 font-[family:var(--font-rajdhani)] text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D6B25E] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] sm:text-[10px] sm:tracking-[0.28em] md:text-[11px] md:tracking-[0.34em]">
-            Certificado
-          </p>
-
-          <motion.div
-            whileHover={
-              shouldReduceMotion
-                ? undefined
-                : {
-                    y: -2,
-                    scale: 1.01,
-                  }
+      <SectionContainer className="relative py-2.5 sm:py-3 lg:py-3.5">
+        <div className="grid items-center gap-2.5 sm:gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:gap-4 lg:gap-5">
+          <motion.a
+            href={certificationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ver certificación 3D Car Care en Instagram"
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+            transition={microTransition}
+            onClick={() =>
+              trackEvent("social_click", {
+                label: "Certificación - 3D Car Care",
+                section: "first-fold",
+                href: certificationUrl,
+              })
             }
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="w-full max-w-[300px] sm:max-w-[360px]"
+            className={cn(
+              "group mx-auto inline-flex min-h-10 items-center gap-2 rounded-full",
+              "border border-white/[0.11] bg-black/24 py-1 pl-1 pr-3",
+              "shadow-[0_8px_26px_rgba(0,0,0,0.22)] backdrop-blur-md",
+              "transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[var(--ease-premium)]",
+              "hover:-translate-y-px hover:border-[var(--accent)]/32",
+              "hover:bg-[var(--accent)]/[0.055]",
+              "hover:shadow-[0_10px_28px_rgba(0,0,0,0.25),0_0_18px_rgba(225,184,93,0.055)]",
+              "md:mx-0",
+            )}
           >
-            <Link
-              href="https://www.instagram.com/3dcarcare?igsh=ajRwd2lvbHFpeHV3"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Ver Instagram de 3D Car Care"
-              className="group flex w-full items-center gap-2.5 rounded-2xl border border-[#D6B25E]/25 bg-black/35 px-3 py-2 shadow-[0_12px_28px_rgba(0,0,0,0.24)] ring-1 ring-white/5 backdrop-blur-sm transition-all duration-300 hover:border-[#D6B25E]/45 hover:bg-black/45 sm:gap-3 sm:px-4 sm:py-3"
+            <div
+              className={cn(
+                "relative h-8 w-8 shrink-0 overflow-hidden rounded-full",
+                "border border-white/[0.13] bg-black",
+                "shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
+              )}
             >
-              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black sm:h-12 sm:w-12 md:h-14 md:w-14">
-                <Image
-                  src="/images/certificaciones/3dcarcare-certificacion.png"
-                  alt="Certificación 3D Car Care"
-                  fill
-                  sizes="(max-width: 640px) 40px, (max-width: 768px) 48px, 56px"
-                  className="object-cover object-center transition duration-500 group-hover:scale-[1.04]"
-                />
-              </div>
+              <Image
+                src="/images/certificaciones/3dcarcare-certificacion.png"
+                alt="Certificación 3D Car Care"
+                fill
+                sizes="32px"
+                className="object-cover transition-transform duration-300 ease-[var(--ease-premium)] group-hover:scale-[1.05]"
+              />
+            </div>
 
-              <div className="flex min-w-0 flex-1 flex-col text-left">
-                <span className="inline-flex items-center gap-1.5 font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.11em] text-[#F3F1EC] sm:text-[12px]">
-                  <BadgeCheck
-                    aria-hidden="true"
-                    className="h-3.5 w-3.5 shrink-0 text-[#D6B25E]"
-                  />
-                  3D Car Care
-                </span>
-
-                <span className="mt-0.5 font-[family:var(--font-rajdhani)] text-[8.5px] font-medium uppercase tracking-[0.10em] text-white/60 sm:text-[10px]">
-                  Formación y respaldo técnico
-                </span>
-              </div>
-
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 whitespace-nowrap",
+                "font-[family:var(--font-accent)] text-[11px] font-bold uppercase tracking-[0.105em]",
+                "text-white/82 transition-colors duration-300",
+                "group-hover:text-[var(--accent-highlight)]",
+                "sm:text-[12px] lg:text-[13px]",
+              )}
+            >
+              <BadgeCheck
+                aria-hidden="true"
+                className="h-3.5 w-3.5 text-[var(--accent-bright)]"
+                strokeWidth={1.8}
+              />
+              Certificado 3D Car Care
               <ExternalLink
                 aria-hidden="true"
-                className="h-3.5 w-3.5 shrink-0 text-[#D6B25E]/80 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:h-4 sm:w-4"
+                className="h-3 w-3 text-white/34 transition-[transform,color] duration-300 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-[var(--accent-bright)]/70"
+                strokeWidth={1.8}
               />
-            </Link>
-          </motion.div>
-        </motion.div>
-      </SectionContainer>
+            </span>
+          </motion.a>
 
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.35 }}
-        transition={{
-          duration: 0.42,
-          delay: 0.06,
-          ease: premiumEase,
-        }}
-        className="relative"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-20 w-10 bg-[linear-gradient(90deg,#070707,rgba(7,7,7,0))] sm:w-16 md:w-28"
-        />
+          <div className="relative min-w-0 overflow-hidden md:border-l md:border-white/[0.09] md:pl-4 lg:pl-5">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 z-20 w-8 bg-[linear-gradient(90deg,rgba(5,5,5,0.98),transparent)] sm:w-10 md:left-4 lg:left-5"
+            />
 
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-20 w-10 bg-[linear-gradient(270deg,#070707,rgba(7,7,7,0))] sm:w-16 md:w-28"
-        />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 z-20 w-8 bg-[linear-gradient(270deg,rgba(5,5,5,0.98),transparent)] sm:w-10"
+            />
 
-        <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-t border-white/10 bg-[#070707]/92 py-2.5 backdrop-blur-sm sm:border-y sm:py-3 md:py-3.5">
-          <div className="marquee-track whitespace-nowrap">
-            {marqueeItems.map((item, index) => (
-              <div
-                key={`${item}-${index}`}
-                className="mx-3 inline-flex items-center sm:mx-4 md:mx-6"
-              >
-                <span className="font-[family:var(--font-rajdhani)] text-[10px] font-semibold uppercase tracking-[0.16em] text-[#F3F1EC] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] sm:text-[11px] md:text-[12px] md:tracking-[0.2em]">
-                  {item}
-                </span>
-
+            <div className="marquee-track whitespace-nowrap py-1">
+              {marqueeItems.map((item, index) => (
                 <span
-                  aria-hidden="true"
-                  className="ml-3 text-[#D6B25E]/70 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] sm:ml-4 md:ml-6"
+                  key={`${item}-${index}`}
+                  className="mx-3 inline-flex items-center gap-4 sm:mx-4 sm:gap-5 lg:mx-5 lg:gap-6"
                 >
-                  •
+                  <span
+                    className={cn(
+                      "font-[family:var(--font-accent)]",
+                      "text-[11px] font-semibold uppercase tracking-[0.115em]",
+                      "text-white/68",
+                      "drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]",
+                      "sm:text-[12px] lg:text-[13px]",
+                    )}
+                  >
+                    {item}
+                  </span>
+
+                  <span
+                    aria-hidden="true"
+                    className="h-1 w-1 rounded-full bg-[var(--accent-bright)]/72 shadow-[0_0_8px_rgba(246,217,141,0.22)]"
+                  />
                 </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </motion.div>
+      </SectionContainer>
     </motion.section>
   );
 }

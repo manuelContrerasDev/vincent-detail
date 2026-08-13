@@ -13,7 +13,7 @@ export const packs: PackItem[] = [
   {
     name: "Pack Bronce",
     slug: "bronce",
-    image: "/images/packs/pack-bronce.jpeg",
+    image: "/images/optimized/pack-bronce.webp",
     summary:
       "Incluye descontaminado exterior y una corrección ligera para mejorar brillo y terminación.",
     accent: "bronce",
@@ -27,7 +27,7 @@ export const packs: PackItem[] = [
   {
     name: "Pack Plata",
     slug: "plata",
-    image: "/images/packs/pack-plata.jpeg",
+    image: "/images/optimized/pack-plata.webp",
     summary:
       "Pulido abrillantado en 1 paso y protección sintética de hasta 6 meses",
     accent: "plata",
@@ -40,7 +40,7 @@ export const packs: PackItem[] = [
   {
     name: "Pack Oro",
     slug: "oro",
-    image: "/images/packs/pack-oro.jpeg",
+    image: "/images/optimized/pack-oro.webp",
     summary:
       "Pack completo con protección cerámica, tratamiento de plásticos interiores y exteriores, vidrios y coating cerámico de carrocería.",
     accent: "oro",
@@ -53,7 +53,7 @@ export const packs: PackItem[] = [
   {
     name: "Pack Diamante",
     slug: "diamante",
-    image: "/images/packs/pack-diamante.jpeg",
+    image: "/images/optimized/pack-diamante.webp",
     summary:
       "Tratamiento cerámico con grafeno que incorpora todo lo incluido en el Pack Oro.",
     accent: "diamante",

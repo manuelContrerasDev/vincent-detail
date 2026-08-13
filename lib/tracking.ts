@@ -6,7 +6,9 @@ export type TrackingEvent =
   | "social_click"
   | "navigation_click"
   | "mobile_menu_click"
-  | "hero_cta_click";
+  | "hero_cta_click"
+  | "gallery_click"
+  | "coverage_click";
 
 type TrackingPayload = {
   label?: string;

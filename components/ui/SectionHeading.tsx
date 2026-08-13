@@ -17,28 +17,97 @@ export function SectionHeading({
   as: HeadingTag = "h2",
   className,
 }: SectionHeadingProps) {
+  const isCentered = align === "center";
+
   return (
     <div
       className={cn(
-        "flex max-w-3xl flex-col",
-        align === "center"
+        "flex max-w-4xl flex-col",
+        isCentered
           ? "mx-auto items-center text-center"
-          : "items-start text-left",
-        className
+          : "mx-auto items-center text-center sm:mx-0 sm:items-start sm:text-left",
+        className,
       )}
     >
       {eyebrow ? (
-        <p className="font-[family:var(--font-rajdhani)] text-[12px] font-bold uppercase tracking-[0.24em] text-[#D6B25E] md:text-[13px] md:tracking-[0.28em]">
-          {eyebrow}
-        </p>
+        <div
+          className={cn(
+            "flex items-center gap-3",
+            isCentered ? "justify-center" : "justify-center sm:justify-start",
+          )}
+        >
+          <span
+            aria-hidden="true"
+            className={cn(
+              "h-px w-8 sm:w-9",
+              "bg-[linear-gradient(90deg,transparent,var(--accent-bright))]",
+              "opacity-65",
+              "shadow-[0_0_8px_rgba(198,161,91,0.06)]",
+            )}
+          />
+
+          <p
+            className={cn(
+              "font-[family:var(--font-accent)]",
+              "text-[11px] font-bold uppercase tracking-[0.165em]",
+              "text-[var(--accent-bright)]",
+              "sm:text-[12px]",
+              "lg:text-[13px] lg:tracking-[0.145em]",
+            )}
+          >
+            {eyebrow}
+          </p>
+
+          {isCentered ? (
+            <span
+              aria-hidden="true"
+              className={cn(
+                "h-px w-8 sm:w-9",
+                "bg-[linear-gradient(270deg,transparent,var(--accent-bright))]",
+                "opacity-65",
+                "shadow-[0_0_8px_rgba(198,161,91,0.06)]",
+              )}
+            />
+          ) : (
+            <span
+              aria-hidden="true"
+              className={cn(
+                "h-px w-8 sm:hidden",
+                "bg-[linear-gradient(270deg,transparent,var(--accent-bright))]",
+                "opacity-65",
+                "shadow-[0_0_8px_rgba(198,161,91,0.06)]",
+              )}
+            />
+          )}
+        </div>
       ) : null}
 
-      <HeadingTag className="mt-3 font-[family:var(--font-heading)] text-[32px] font-bold uppercase leading-[1.02] tracking-[-0.03em] text-[#f7f3eb] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] sm:text-[38px] md:text-[46px] lg:text-[54px]">
+      <HeadingTag
+        className={cn(
+          "mt-4 max-w-[18ch]",
+          "font-[family:var(--font-heading)] font-semibold",
+          "text-[clamp(2.15rem,5.5vw,4.75rem)]",
+          "leading-[0.97] tracking-[-0.058em]",
+          "text-[var(--text-primary)]",
+          "drop-shadow-[0_14px_36px_rgba(0,0,0,0.34)]",
+          "sm:mt-5",
+          "lg:max-w-[19ch]",
+          isCentered ? "mx-auto" : "mx-auto sm:mx-0",
+        )}
+      >
         {title}
       </HeadingTag>
 
       {description ? (
-        <p className="mt-4 max-w-2xl font-[family:var(--font-body)] text-[15px] leading-7 text-white/72 sm:text-[16px] md:text-[17px] md:leading-8">
+        <p
+          className={cn(
+            "text-pretty mt-4 max-w-2xl",
+            "text-[15px] leading-7 text-[var(--text-secondary)]",
+            "sm:mt-5 sm:text-[16px] sm:leading-7",
+            "lg:mt-6 lg:text-[18px] lg:leading-8",
+            !isCentered && "mx-auto sm:mx-0",
+          )}
+        >
           {description}
         </p>
       ) : null}
