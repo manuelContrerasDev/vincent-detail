@@ -27,15 +27,10 @@ const ICON_BY_HREF: Record<QuickAccessHref, LucideIcon> = {
 
 type QuickAccessTileProps = {
   item: QuickAccessItem;
-  index: number;
   shouldReduceMotion: boolean;
 };
 
-function QuickAccessTile({
-  item,
-  index,
-  shouldReduceMotion,
-}: QuickAccessTileProps) {
+function QuickAccessTile({ item, shouldReduceMotion }: QuickAccessTileProps) {
   const Icon = ICON_BY_HREF[item.href];
 
   return (
@@ -69,8 +64,9 @@ function QuickAccessTile({
         src={item.image}
         alt=""
         fill
-        sizes="(max-width: 767px) 50vw, (max-width: 1023px) 25vw, 310px"
-        priority={index < 2}
+        loading="lazy"
+        quality={60}
+        sizes="(max-width: 767px) 50vw, (max-width: 1023px) 50vw, 310px"
         className={cn(
           "-z-30 object-cover",
           "opacity-[0.62] saturate-[0.78] contrast-[1.12]",
@@ -248,11 +244,10 @@ export function QuickAccessCard() {
               "xl:min-h-[392px]",
             )}
           >
-            {quickAccessItems.map((item, index) => (
+            {quickAccessItems.map((item) => (
               <QuickAccessTile
                 key={item.href}
                 item={item}
-                index={index}
                 shouldReduceMotion={shouldReduceMotion}
               />
             ))}
