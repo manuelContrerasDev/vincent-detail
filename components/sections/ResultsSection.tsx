@@ -57,6 +57,7 @@ function useResponsiveCardWidth(viewportRef: RefObject<HTMLDivElement | null>) {
     };
 
     updateCardWidth();
+
     const observer = new ResizeObserver(updateCardWidth);
     observer.observe(viewport);
 
@@ -79,18 +80,51 @@ function ResultCard({
   setActiveKey,
 }: ResultCardProps) {
   const shouldReduceMotion = Boolean(useReducedMotion());
+  const cardRef = useRef<HTMLLIElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [shouldLoadPoster, setShouldLoadPoster] = useState(false);
   const isActive = activeKey === instanceKey;
+
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!node) return;
+
+    if (!("IntersectionObserver" in window)) {
+      const fallbackTimer = setTimeout(() => {
+        setShouldLoadPoster(true);
+      }, 0);
+
+      return () => clearTimeout(fallbackTimer);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setShouldLoadPoster(true);
+        observer.disconnect();
+      },
+      {
+        rootMargin: "220px 120px",
+        threshold: 0.01,
+      },
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
 
   const play = useCallback(async () => {
     const node = videoRef.current;
     if (!node) return;
 
     pauseAllExcept(instanceKey);
-    setActiveKey(instanceKey);
+    setShouldLoadPoster(true);
 
     try {
       await node.play();
+      setActiveKey(instanceKey);
     } catch {
       setActiveKey((current) => (current === instanceKey ? null : current));
     }
@@ -100,8 +134,13 @@ function ResultCard({
     (reset = true) => {
       const node = videoRef.current;
       if (!node) return;
+
       node.pause();
-      if (reset) node.currentTime = 0;
+
+      if (reset) {
+        node.currentTime = 0;
+      }
+
       setActiveKey((current) => (current === instanceKey ? null : current));
     },
     [instanceKey, setActiveKey],
@@ -112,11 +151,13 @@ function ResultCard({
       stop(false);
       return;
     }
+
     await play();
   }, [isActive, play, stop]);
 
   return (
     <li
+      ref={cardRef}
       className={cn(
         "shrink-0 snap-start",
         mode === "mobile" ? "w-[84vw] max-w-[370px]" : "result-marquee-card",
@@ -155,11 +196,11 @@ function ResultCard({
             registerVideo(instanceKey, node);
           }}
           src={video}
-          poster={poster}
+          poster={shouldLoadPoster ? poster : undefined}
           muted
           loop
           playsInline
-          preload={duplicate ? "none" : "metadata"}
+          preload="none"
           aria-hidden="true"
           onPlay={() => setActiveKey(instanceKey)}
           onPause={() =>
@@ -256,8 +297,11 @@ export function ResultsSection() {
 
   const registerVideo = useCallback(
     (key: string, node: HTMLVideoElement | null) => {
-      if (node) videoMapRef.current[key] = node;
-      else delete videoMapRef.current[key];
+      if (node) {
+        videoMapRef.current[key] = node;
+      } else {
+        delete videoMapRef.current[key];
+      }
     },
     [],
   );
@@ -265,6 +309,7 @@ export function ResultsSection() {
   const pauseAllExcept = useCallback((currentKey: string) => {
     Object.entries(videoMapRef.current).forEach(([key, node]) => {
       if (!node || key === currentKey) return;
+
       node.pause();
       node.currentTime = 0;
     });
@@ -273,14 +318,17 @@ export function ResultsSection() {
   const pauseAllVideos = useCallback(() => {
     Object.values(videoMapRef.current).forEach((node) => {
       if (!node) return;
+
       node.pause();
       node.currentTime = 0;
     });
+
     setActiveKey(null);
   }, []);
 
   useEffect(() => {
     const videoRegistry = videoMapRef.current;
+
     return () => {
       Object.values(videoRegistry).forEach((node) => node?.pause());
     };
@@ -323,7 +371,9 @@ export function ResultsSection() {
       >
         <div
           onPointerDown={(event) => {
-            if (event.pointerType === "touch") pauseAllVideos();
+            if (event.pointerType === "touch") {
+              pauseAllVideos();
+            }
           }}
           className={cn(
             "relative -mr-5 overflow-x-auto overscroll-x-contain pr-5 sm:hidden",

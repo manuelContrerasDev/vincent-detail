@@ -4,7 +4,7 @@ import { ArrowUpRight, Check } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { CTAButton } from "@/components/ui/CTAButton";
 import type { PackAccent } from "@/content/packs";
-import { fadeUp, microTransition, softTransition } from "@/lib/motion";
+import { fadeUp, softTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 

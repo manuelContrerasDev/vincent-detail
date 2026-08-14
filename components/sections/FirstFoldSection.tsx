@@ -27,7 +27,8 @@ export function FirstFoldSection() {
           src="/gallery/resultado-07.jpeg"
           alt=""
           fill
-          priority
+          preload
+          quality={50}
           sizes="100vw"
           className="object-cover object-[60%_center] sm:object-[57%_center] md:object-[55%_center] lg:object-center"
         />
