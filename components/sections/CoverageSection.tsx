@@ -8,6 +8,7 @@ import { CTAButton } from "@/components/ui/CTAButton";
 import { siteConfig } from "@/content/site";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { premiumEase } from "@/lib/motion";
+import { DeferredGoogleMap } from "@/components/ui/DeferredGoogleMap";
 import { cn } from "@/lib/utils";
 
 const primaryZones = ["El Monte", "Talagante", "Buin", "Isla de Maipo"];
@@ -86,13 +87,10 @@ export function CoverageSection() {
               "lg:min-h-[36rem]",
             )}
           >
-            <iframe
+            <DeferredGoogleMap
               title={`Ubicación base de ${siteConfig.name} en ${siteConfig.location}`}
               src={siteConfig.googleMapsEmbedUrl}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="strict-origin-when-cross-origin"
-              className="absolute inset-0 h-full w-full border-0 grayscale-[0.14] contrast-[1.06] saturate-[0.90]"
+              className="grayscale-[0.14] contrast-[1.06] saturate-[0.90]"
             />
 
             <div
